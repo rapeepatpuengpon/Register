@@ -1,7 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class Registration1 {
+public class Add {
     public static void main(String[] args) {
     JFrame f = new JFrame("Registration");
     Container cp = f.getContentPane();
