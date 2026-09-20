@@ -2,31 +2,31 @@ import java.awt.*;
 import javax.swing.*;
 public class Registration {
         public static void main(String[] args) {
-        JFrame f = new JFrame("Vehicle registration");
+        JFrame f = new JFrame("Registration");
         Container cp = f.getContentPane();
         cp.setLayout(null);
         
         JLabel l = new JLabel("Registration");
-        l.setBounds(430, 300, 190, 50);
+        l.setBounds(170, 80, 180, 50);
         //l.setSize(100);
         l.setFont(new Font("", Font.BOLD, 30));
 
 
         JLabel l1 = new JLabel("USER");
         JTextField t1 = new JTextField();
-        l1.setBounds(350, 390, 80, 50);
-        t1.setBounds(350,440, 200, 30);        
+        l1.setBounds(155, 140, 80, 50);
+        t1.setBounds(155,200, 200, 30);        
         l1.setFont(new Font("", Font.BOLD, 19));
         
 
         JLabel l2 = new JLabel("Password");
         JTextField t2 = new JTextField();
-        l2.setBounds(350, 500, 100, 50);
-        t2.setBounds(350,550, 200, 30);
+        l2.setBounds(155, 240, 100, 50);
+        t2.setBounds(155,300, 200, 30);
         l2.setFont(new Font("", Font.BOLD, 19));
 
         JButton b = new JButton("Login");
-        b.setBounds(350, 620, 100, 50);
+        b.setBounds(155, 360, 100, 50);
 
         cp.add(l);
         cp.add(l1);
@@ -36,10 +36,11 @@ public class Registration {
         cp.add(b);
 
 
-        f.setSize(1000, 1000);
+        f.setSize(500, 500);
         f.setLocationRelativeTo(null);
         //f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.setVisible(true);
+        f.setResizable(false);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
     }
