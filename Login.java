@@ -1,16 +1,16 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-public class Login extends JFrame implements ActionListener{
+public class Login extends JFrame implements ActionListener {
 
     Container cp;
     JPanel p;
-    JLabel l;
-    JLabel l1;
-    JTextField t1;
-    JLabel l2;
-    JPasswordField t2;
-    JButton b;
+    JLabel regis;
+    JLabel user;
+    JTextField textuser;
+    JLabel pass;
+    JPasswordField textpass;
+    JButton login;
 
     public Login() {
         Intitial();
@@ -27,34 +27,34 @@ public class Login extends JFrame implements ActionListener{
     }
 
     public void setComponent(){
-        l = new JLabel("Registration");
-        l.setBounds(0, 10, 300, 50);
-        l.setHorizontalAlignment(JLabel.CENTER);
-        l.setFont(new Font("", Font.BOLD, 25));
+        regis = new JLabel("Registration");
+        regis.setBounds(0, 10, 300, 50);
+        regis.setHorizontalAlignment(JLabel.CENTER);
+        regis.setFont(new Font("", Font.BOLD, 25));
 
 
-        l1 = new JLabel("USER");
-        t1 = new JTextField();
-        l1.setBounds(50, 50, 50, 50);
-        t1.setBounds(50,90, 200, 30);        
-        l1.setFont(new Font("", Font.BOLD, 16));
+        user = new JLabel("USER");
+        textuser = new JTextField();
+        user.setBounds(50, 50, 50, 50);
+        textuser.setBounds(50,90, 200, 30);        
+        user.setFont(new Font("", Font.BOLD, 16));
         
 
-        l2 = new JLabel("Password");
-        t2 = new JPasswordField();
-        l2.setBounds(50, 120, 100, 50);
-        t2.setBounds(50,160, 200, 30);
-        l2.setFont(new Font("", Font.BOLD, 16));
+        pass = new JLabel("Password");
+        textpass = new JPasswordField();
+        pass.setBounds(50, 120, 100, 50);
+        textpass.setBounds(50,160, 200, 30);
+        pass.setFont(new Font("", Font.BOLD, 16));
 
-        b = new JButton("Login");
-        b.setBounds(100, 220, 100, 40);
+        login = new JButton("Login");
+        login.setBounds(100, 220, 100, 40);
 
-        p.add(l);
-        p.add(l1);
-        p.add(t1);
-        p.add(l2);
-        p.add(t2);
-        p.add(b);
+        p.add(regis);
+        p.add(user);
+        p.add(textuser);
+        p.add(pass);
+        p.add(textpass);
+        p.add(login);
 
         p.setBounds(95, 80, 300, 300);
         cp.add(p);
@@ -70,7 +70,18 @@ public class Login extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+       login();
+    }
+    public String getusername(){
+        return "";
+    }
+    public String getpassword(){
+        return "";
+    }
+    public void login(){
+        
+    }
+    public boolean checklogin(){
+        return false;
     }
 }
