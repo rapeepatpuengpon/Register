@@ -1,6 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 public class Login extends JFrame implements ActionListener {
 
     Container cp;
@@ -11,6 +13,7 @@ public class Login extends JFrame implements ActionListener {
     JLabel pass;
     JPasswordField textpass;
     JButton login;
+    JLabel warningLabel;
 
     public Login() {
         Intitial();
@@ -49,17 +52,23 @@ public class Login extends JFrame implements ActionListener {
         login = new JButton("Login");
         login.setBounds(100, 220, 100, 40);
 
+        warningLabel = new JLabel();
+        warningLabel.setBounds(50,120,190,160);
+        warningLabel.setFont(new Font("", Font.BOLD, 11));
+
+ 
         p.add(regis);
         p.add(user);
         p.add(textuser);
         p.add(pass);
         p.add(textpass);
         p.add(login);
+        p.add(warningLabel);
+        login.addActionListener(this);
 
         p.setBounds(95, 80, 300, 300);
         cp.add(p);
     }
-
     public void Finally() {
         this.setSize(500, 500);
         this.setLocationRelativeTo(null);
@@ -72,20 +81,46 @@ public class Login extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
        login();
     }
-
     public String getusername(){
         return textuser.getText();
     }
-
     public String getpassword(){
         return new String(textpass.getPassword());
+         
     }
-
+    public void showWarning(String msg){
+        warningLabel.setText(msg);
+    }
     public void login(){
-        
+        String user = getusername();
+        String pass = getpassword();
+    if (user.isEmpty() || pass.isEmpty()) {
+        showWarning("Username or Password isempty!!!");
+        return;
     }
+    if (checklogin(user,pass)) {
+        warningLabel.setForeground(Color.GREEN);
+        showWarning("Login complete");
+    }
+    else{
+        warningLabel.setForeground(Color.RED);
+        showWarning("invallid");
+     }
+    }
+      public boolean checklogin(String user, String pass){
+        try(BufferedReader br = new BufferedReader(new FileReader("database/Nisit.csv"))){
+            br.readLine();
+            String s;
+            while ((s = br.readLine()) != null) {
+                String[] data = s.split(",");
 
-    public boolean checklogin(){
+                if(data[0].equals(user) && data[2].equals(pass)) {
+                    return true;
+                }
+            }
+        } catch (Exception e1) {
+          e1.printStackTrace();
+        }
         return false;
     }
-}
+    }
