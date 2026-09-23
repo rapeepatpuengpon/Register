@@ -72,15 +72,19 @@ public class Login extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
        login();
     }
+
     public String getusername(){
-        return "";
+        return textuser.getText();
     }
+
     public String getpassword(){
-        return "";
+        return new String(textpass.getPassword());
     }
+
     public void login(){
         
     }
+
     public boolean checklogin(){
         return false;
     }
