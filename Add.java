@@ -1,47 +1,85 @@
 import java.awt.*;
 import javax.swing.*;
 
-public class Add {
-    public static void main(String[] args) {
-    JFrame f = new JFrame("Registration");
-    Container cp = f.getContentPane();
-    cp.setLayout(null);
-    JPanel p = new JPanel();
-    p.setLayout(null);
+public class Add extends JFrame {
 
-    JLabel l = new JLabel("Registration");
-    l.setBounds(400, 20, 200, 50);
-    l.setFont(new Font("", Font.BOLD, 35));
-
-    JLabel l1 = new JLabel("Course Code");
-    JTextField t = new JTextField();
-    l1.setBounds(90, 100, 200, 50);
-    t.setBounds(90,150,300,30);
-    l1.setFont(new Font("", Font.BOLD, 25));
-
-    JButton b = new JButton("Add");
-    b.setBounds(350, 240, 100, 50);
-
-    JButton b1 = new JButton("Confirm");
-    b1.setBounds(470, 240, 100, 50);
-
-    p.add(l);
-    p.add(l1);
-    p.add(t);
-    p.add(b);
-    p.add(b1);
-
-    p.setBackground(Color.PINK);
-    p.setBounds(250, 350, 1000, 400);
-    cp.add(p);
+    Container cp ;
+    JPanel p ;
+    JPanel pbutton ;
+    JLabel regis;
+    JLabel code;
+    JTextField textcode;
+    JButton add;
+    JButton confirm; 
 
 
+    public Add(){
+        Intitial();
+        setComponent();
+        Finally();
+    }
+
+    public void Intitial(){
+        cp = this.getContentPane();
+        cp.setLayout(new GridBagLayout());
+        cp.setBackground(Color.LIGHT_GRAY);
+        p = new JPanel();
+        p.setLayout(new GridBagLayout());
+        p.setPreferredSize(new Dimension(600, 400));
+        p.setBackground(Color.WHITE);
+    }
 
 
-    f.setSize(1500, 1000);
-    f.setLocationRelativeTo(null);
-    f.setResizable(false);
-    f.setVisible(true);
-    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public void setComponent(){
+        GridBagConstraints g = new GridBagConstraints();
+        g.insets = new Insets(15, 15, 15, 15);
+        regis = new JLabel("Registration");
+        regis.setFont(new Font("SansSerif", Font.BOLD, 35));
+        g.gridx = 0; 
+        g.gridy = 0; 
+        g.gridwidth = 2; 
+        p.add(regis, g);
+
+        g.gridwidth = 1;
+
+        code = new JLabel("Course Code :");
+        code.setFont(new Font("SansSerif", Font.BOLD, 25));
+        g.gridx = 0; 
+        g.gridy = 1; 
+        g.anchor = GridBagConstraints.EAST; 
+        p.add(code, g);
+
+        JTextField textcode= new JTextField(10); 
+        textcode.setFont(new Font("SansSerif", Font.PLAIN, 25));
+        g.gridx = 1; 
+        g.gridy = 1; 
+        g.anchor = GridBagConstraints.WEST; 
+        p.add(textcode, g);
+
+        pbutton = new JPanel();
+        pbutton.setBackground(Color.WHITE); // สีเดียวกับพื้นหลัง Panel p
+        
+        JButton add = new JButton("Add");
+        add.setFont(new Font("SansSerif", Font.BOLD, 17));
+        
+        JButton confirm = new JButton("Confirm");
+        confirm.setFont(new Font("SansSerif", Font.BOLD, 17));
+        pbutton.add(add);
+        pbutton.add(confirm);
+        g.gridx = 0; 
+        g.gridy = 2; 
+        g.gridwidth = 2; // สั่งให้กินพื้นที่ 2 คอลัมน์เพื่อให้อยู่กึ่งกลางพอดี
+        g.anchor = GridBagConstraints.CENTER;
+        p.add(pbutton, g);
+
+        cp.add(p);
+    }
+
+    public void Finally(){
+        this.setSize(1000, 800); 
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
