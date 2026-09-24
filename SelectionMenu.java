@@ -10,11 +10,11 @@ public class SelectionMenu extends JFrame implements ActionListener{
     public SelectionMenu(){
         Intitial();
         setComponent();
-        Finally();
+        setupFrame();
     }
     public void Intitial(){
         cp = this.getContentPane();
-        cp.setBackground(Color.LIGHT_GRAY);
+        cp.setBackground(Color.WHITE);
         cp.setLayout(null);
         panel = new JPanel();
         panel.setLayout(null);
@@ -27,7 +27,7 @@ public class SelectionMenu extends JFrame implements ActionListener{
         add = new JButton("ลงทะเบียนเรียน");
         add.setBounds(70, 100, 130, 50);
         add.setFont(new Font("",Font.BOLD,12));
-
+        
         drop = new JButton("ถอนรายวิชา");
         drop.setBounds(230, 100, 130, 50);
         drop.setFont(new Font("",Font.BOLD,12));
@@ -36,7 +36,6 @@ public class SelectionMenu extends JFrame implements ActionListener{
         mysubject.setBounds(390, 100, 130, 50);
         mysubject.setFont(new Font("",Font.BOLD,12));
         
-
         panel.setBounds(0,0,600,300);
         panel.add(selection);
         panel.add(add);
@@ -46,20 +45,21 @@ public class SelectionMenu extends JFrame implements ActionListener{
         cp.add(panel);
 
     }
-    public void Finally(){
+    public void setupFrame(){
+        
         this.setSize(600, 250);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
-    
-    public void actionPerformed(ActionEvent e) {
-       add();
+    public void actionPerformed(ActionEvent e) { 
+        if (e.getSource()==add) {
+            add.setEnabled(false);
+            new Readd(this);
+        }
     }
-    public void add(){
-       new Add();
+    public void enableAddButton() {
+        add.setEnabled(true);
     }
-   
-    
 }
