@@ -1,3 +1,4 @@
+import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 
@@ -11,25 +12,24 @@ public class Add extends JFrame {
     JTextField textcode;
     JButton add;
     JButton confirm; 
+    SelectionMenu menu;
 
 
-    public Add(){
+    public Add(SelectionMenu menu){
+        this.menu = menu;
         Intitial();
         setComponent();
-        Finally();
+        setupFrame();
     }
-
     public void Intitial(){
         cp = this.getContentPane();
         cp.setLayout(new GridBagLayout());
-        cp.setBackground(Color.LIGHT_GRAY);
+        cp.setBackground(Color.WHITE);
         p = new JPanel();
         p.setLayout(new GridBagLayout());
         p.setPreferredSize(new Dimension(600, 400));
         p.setBackground(Color.WHITE);
     }
-
-
     public void setComponent(){
         GridBagConstraints g = new GridBagConstraints();
         g.insets = new Insets(15, 15, 15, 15);
@@ -71,15 +71,20 @@ public class Add extends JFrame {
         g.gridwidth = 2; // สั่งให้กินพื้นที่ 2 คอลัมน์เพื่อให้อยู่กึ่งกลางพอดี
         g.anchor = GridBagConstraints.CENTER;
         p.add(pbutton, g);
-
         cp.add(p);
     }
 
-    public void Finally(){
+    public void setupFrame(){
         this.setSize(1000, 800); 
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        this.addWindowListener(new WindowAdapter() {
+        public void windowClosed(WindowEvent e) {
+            menu.enableAddButton();
+        }
+        });
         this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
+   
 }
