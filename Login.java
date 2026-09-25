@@ -101,6 +101,8 @@ public class Login extends JFrame implements ActionListener {
     if (checklogin(user,pass)) {
         warningLabel.setForeground(Color.GREEN);
         showWarning("Login complete");
+        this.dispose();
+        new SelectionMenu(user);
     }
     else{
         warningLabel.setForeground(Color.RED);
@@ -108,7 +110,7 @@ public class Login extends JFrame implements ActionListener {
      }
     }
       public boolean checklogin(String user, String pass){
-        try(BufferedReader br = new BufferedReader(new FileReader("database/Nisit.csv"))){
+        try(BufferedReader br = new BufferedReader(new FileReader("./Lib/Nisit.csv"))){
             br.readLine();
             String s;
             while ((s = br.readLine()) != null) {
