@@ -7,7 +7,9 @@ public class SelectionMenu extends JFrame implements ActionListener{
     JPanel panel;
     JLabel selection;
     JButton add,mysubject,drop;
-    public SelectionMenu(){
+    String currentuser;
+    public SelectionMenu(String user){
+        this.currentuser = user;
         Intitial();
         setComponent();
         setupFrame();
@@ -20,22 +22,22 @@ public class SelectionMenu extends JFrame implements ActionListener{
         panel.setLayout(null);
     }
     public void setComponent(){
-        selection = new JLabel("รายการเลือก");
-        selection.setBounds(200, 20, 300, 50);
+        selection = new JLabel("Select");
+        selection.setBounds(250, 20, 300, 50);
         selection.setFont(new Font("",Font.BOLD,30));
 
-        add = new JButton("ลงทะเบียนเรียน");
+        add = new JButton("Registration");
         add.setBounds(70, 100, 130, 50);
         add.setFont(new Font("",Font.BOLD,12));
-        
-        drop = new JButton("ถอนรายวิชา");
+
+        drop = new JButton("Repeal");
         drop.setBounds(230, 100, 130, 50);
         drop.setFont(new Font("",Font.BOLD,12));
 
-        mysubject = new JButton("ผลลงทะเบียน");
+        mysubject = new JButton("My list");
         mysubject.setBounds(390, 100, 130, 50);
         mysubject.setFont(new Font("",Font.BOLD,12));
-        
+
         panel.setBounds(0,0,600,300);
         panel.add(selection);
         panel.add(add);
@@ -46,7 +48,7 @@ public class SelectionMenu extends JFrame implements ActionListener{
 
     }
     public void setupFrame(){
-        
+
         this.setSize(600, 250);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -56,7 +58,7 @@ public class SelectionMenu extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) { 
         if (e.getSource()==add) {
             add.setEnabled(false);
-            new Readd(this);
+            new Add(this,currentuser);
         }
     }
     public void enableAddButton() {
