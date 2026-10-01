@@ -15,10 +15,12 @@ public class Add extends JFrame implements ActionListener {
     JButton add;
     JButton confirm; 
     SelectionMenu menu;
+    String currentuser;
 
 
-    public Add(SelectionMenu menu){
+    public Add(SelectionMenu menu,String user){
         this.menu = menu;
+        this.currentuser = user;
         Intitial();
         setComponent();
         setupFrame();
@@ -61,7 +63,7 @@ public class Add extends JFrame implements ActionListener {
         g.anchor = GridBagConstraints.WEST; 
         p.add(textcode, g);
 
-        warninglabel = new JLabel("warning");
+        warninglabel = new JLabel("");
         warninglabel.setFont(new Font("", Font.BOLD, 12));
         g.gridx = 1;
         g.gridy = 2;
@@ -116,11 +118,11 @@ public class Add extends JFrame implements ActionListener {
             showWarning("Course Code is Emply!!!");
             return;
         }
-        if(checkRegis(code)) {
+        if(checkRegis(code,currentuser)) {
             showWarning("Duplicate course code!!!");
             return ;
         }
-        if(savesubject(code)) {
+        if(savesubject(code,currentuser)) {
             showWarning("Register Complete!!!");
             return ;
         }
@@ -129,13 +131,13 @@ public class Add extends JFrame implements ActionListener {
         }
         
     }
-    public boolean checkRegis(String code){
+    public boolean checkRegis(String code,String curruser){
         try(BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))){
             String s;
             while ((s = br.readLine()) != null) {
                 String[] data = s.split(",");
 
-                if(data[0].equals(code) ) {
+                if(data[0].equals(curruser) && data[1].equals(code)) {
                     return true;
                 }
             }
@@ -145,7 +147,7 @@ public class Add extends JFrame implements ActionListener {
         return false;
     }
 
-    public boolean savesubject(String code) {
+    public boolean savesubject(String code,String currentuser) {
         String subjectname = "";
         String weight = "";
         boolean found = false;
@@ -169,7 +171,7 @@ public class Add extends JFrame implements ActionListener {
         
         if(found) {
             try(BufferedWriter bw = new BufferedWriter(new FileWriter("Lib/sub_regis.csv",true))) {
-                bw.write(code + "," + subjectname + "," + weight + ",");
+                bw.write(currentuser + "," + code + "," + subjectname + "," + weight + ",");
                 bw.newLine();
                 return true;
             } catch (Exception e4) {
