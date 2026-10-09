@@ -44,6 +44,8 @@ public class SelectionMenu extends JFrame implements ActionListener{
         panel.add(drop);
         panel.add(mysubject);
         add.addActionListener(this);
+        mysubject.addActionListener(this);
+        drop.addActionListener(this);
         cp.add(panel);
 
     }
@@ -60,8 +62,13 @@ public class SelectionMenu extends JFrame implements ActionListener{
             add.setEnabled(false);
             new Add(this,currentuser);
         }
+        if (e.getSource()==mysubject) {
+            mysubject.setEnabled(false);
+            new MyList(this,currentuser);
+        }
     }
     public void enableAddButton() {
         add.setEnabled(true);
+        mysubject.setEnabled(true);
     }
 }
