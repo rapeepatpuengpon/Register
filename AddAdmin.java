@@ -34,7 +34,7 @@ public class AddAdmin extends JFrame implements ActionListener {
 
         paneladd = new JPanel();
         paneladd.setLayout(new GridBagLayout());
-        paneladd.setBackground(Color.pink);
+        paneladd.setBackground(Color.lightGray);
         paneladd.setPreferredSize(new Dimension(250, 350));
 
     }

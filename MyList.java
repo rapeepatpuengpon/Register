@@ -8,6 +8,7 @@ public class MyList extends JFrame {
 
     Container cp;
     JPanel panelbody, panelhead, wrappanel;
+    JLabel weightlabel, weight;
     String user;
     SelectionMenu menu;
 
@@ -62,12 +63,30 @@ public class MyList extends JFrame {
         ghead.insets = new Insets(10, 100, 0, 0);
         panelhead.add(name, ghead);
 
+        JLabel year = new JLabel("Year :" + getyear(getusername()));
+        ghead.gridx = 0;
+        ghead.gridy = 3;
+        ghead.anchor = GridBagConstraints.WEST;
+        year.setFont(new Font("", Font.BOLD, 25));
+        ghead.insets = new Insets(10, 100, 0, 0);
+        panelhead.add(year, ghead);
+
         GridBagConstraints gwrap = new GridBagConstraints();
-        gwrap.insets = new Insets(0, 0, 60, 0);
+        gwrap.insets = new Insets(0, 0, 20, 0);
         JScrollPane scrollPane = new JScrollPane(panelbody);
-        scrollPane.setPreferredSize(new Dimension(800, 450));
+        scrollPane.setPreferredSize(new Dimension(800, 400));
+        gwrap.gridx = 0;
+        gwrap.gridy = 0;
         wrappanel.add(scrollPane, gwrap);
-        
+
+        weightlabel = new JLabel("Total Weight : " + calweight(getusername()));
+        gwrap.gridx = 0;
+        gwrap.gridy = 1;
+        gwrap.anchor = GridBagConstraints.EAST;
+        gwrap.insets = new Insets(0, 0, 60, 20);
+        weightlabel.setFont(new Font("", Font.BOLD, 15));
+        wrappanel.add(weightlabel, gwrap);
+
         writesubject(this.user);
 
         cp.add(panelhead, BorderLayout.NORTH);
@@ -100,6 +119,24 @@ public class MyList extends JFrame {
 
                 if (data[0].equals(user)) {
                     return data[1];
+                }
+
+            }
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return "";
+    }
+
+    public String getyear(String user) {
+        try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
+            br.readLine();
+            String s;
+            while ((s = br.readLine()) != null) {
+                String data[] = s.split(",");
+
+                if (data[0].equals(user)) {
+                    return data[4];
                 }
 
             }
@@ -154,7 +191,28 @@ public class MyList extends JFrame {
         } catch (Exception e1) {
             e1.printStackTrace();
         }
+        
+        panelbody.revalidate();
+        panelbody.repaint();
 
+    }
+
+    public int calweight(String user) {
+        int total = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))){
+            String s;
+            int data_weight;
+            while ((s = br.readLine()) != null) {
+                String data[] = s.split(",");
+                if (data[0].equals(user)) {
+                    data_weight = Integer.parseInt(data[3]);
+                    total = total + data_weight;
+                }
+            }
+        } catch (Exception ew) {
+            ew.printStackTrace();
+        }
+        return total;
     }
 
 }
