@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.io.*;
 
 public class AddAdmin extends JFrame implements ActionListener {
+
     Container cp;
     JPanel panelhead, panelbody, wrappanel, paneladd;
     JComboBox<String> boxyear = new JComboBox<>();
@@ -11,8 +12,12 @@ public class AddAdmin extends JFrame implements ActionListener {
     JLabel warningcode, warningsubject, warningweight, warningyear;
     JTextField codetext, subjecttext, weighttext, yeartext;
     JButton addsubject;
+    SelectionAdmin menu;
+    String currentuser;
 
-    public AddAdmin() {
+    public AddAdmin(SelectionAdmin menu,String user) {
+        this.menu = menu;
+        this.currentuser = user;
         Intitial();
         setComponent();
         setupFrame();
@@ -178,6 +183,11 @@ public class AddAdmin extends JFrame implements ActionListener {
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+         this.addWindowListener(new WindowAdapter() {
+            public void windowClosed(WindowEvent e) {
+                menu.enableAddButton();
+            }
+        });
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
