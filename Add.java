@@ -267,7 +267,6 @@ public class Add extends JFrame implements ActionListener {
         listPanel.revalidate();
         listPanel.repaint();
     }
-
     public void savesubject(String user, String code, String subject, int weight, String year) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("Lib/sub_regis.csv", true))) {
             bw.write(user + "," + code + "," + subject + "," + weight + "," + year);
@@ -276,11 +275,9 @@ public class Add extends JFrame implements ActionListener {
             e3.printStackTrace();
         }
     }
-
     public String getusername() {
         return currentuser;
     }
-
     public String getname(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();

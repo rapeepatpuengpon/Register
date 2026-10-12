@@ -66,9 +66,14 @@ public class SelectionMenu extends JFrame implements ActionListener{
             mysubject.setEnabled(false);
             new MyList(this,currentuser);
         }
+        if(e.getSource()==drop){
+            drop.setEnabled(false);
+            new Repeal(this,currentuser);
+        }
     }
     public void enableAddButton() {
         add.setEnabled(true);
         mysubject.setEnabled(true);
+        drop.setEnabled(true);
     }
 }
