@@ -9,7 +9,7 @@ public class Add extends JFrame implements ActionListener {
     JPanel headPanel, bodyPanel, listPanel;
     JLabel regis, user, name , year, weight;
     JLabel labelCode, labelSubject, currentweight;
-    JLabel head, warning;
+    JLabel head;
     JRadioButton radio;
     ButtonGroup group;
     JScrollPane scrollPane;
@@ -92,14 +92,6 @@ public class Add extends JFrame implements ActionListener {
         gbody.insets = new Insets(15, 0, 100, 0);
         bodyPanel.add(add, gbody);
 
-        warning = new JLabel();
-        gbody.gridx = 0;
-        gbody.gridy = 1;
-        gbody.anchor = GridBagConstraints.WEST;
-        gbody.insets = new Insets(10, 0, 100, 0);
-        warning.setFont(new Font("", Font.PLAIN, 20));
-        bodyPanel.add(warning, gbody);
-
         add.addActionListener(this);
 
         cp.add(bodyPanel, BorderLayout.CENTER);
@@ -138,15 +130,13 @@ public class Add extends JFrame implements ActionListener {
                 int weight = Integer.parseInt(data[2]);
 
                 if (checkduplicatesubject(currentuser, getsubject())) {
-                    showWarning("Subject Duplicate");
-                    warning.setForeground(Color.red);
+                    JOptionPane.showMessageDialog(this,"Subject Duplicate");
                     return;
                 }
 
                 int currentweight = countweight(getusername());
                 if(currentweight + weight > 21) {
-                    showWarning("More than 21 credits");
-                    warning.setForeground(Color.red);
+                    JOptionPane.showMessageDialog(this, "More than 21 credits");
                     return ;
                 }
 
@@ -154,11 +144,9 @@ public class Add extends JFrame implements ActionListener {
 
                 loadSubjects(getyear(currentuser));
 
-                showWarning("Add Complete");
-                warning.setForeground(Color.GREEN);
+                JOptionPane.showMessageDialog(this, "Add Complete");
             } else {
-                showWarning("Please Choose Subject");
-                warning.setForeground(Color.red);
+                JOptionPane.showMessageDialog(this, "Please Choose Subject");
             }
 
         }
@@ -195,10 +183,6 @@ public class Add extends JFrame implements ActionListener {
             e4.printStackTrace();
         }
         return false;
-    }
-
-    public void showWarning(String msg) {
-        warning.setText(msg);
     }
 
     public void loadSubjects(String selectedYear) {
@@ -267,6 +251,7 @@ public class Add extends JFrame implements ActionListener {
         listPanel.revalidate();
         listPanel.repaint();
     }
+
     public void savesubject(String user, String code, String subject, int weight, String year) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("Lib/sub_regis.csv", true))) {
             bw.write(user + "," + code + "," + subject + "," + weight + "," + year);
@@ -275,9 +260,11 @@ public class Add extends JFrame implements ActionListener {
             e3.printStackTrace();
         }
     }
+
     public String getusername() {
         return currentuser;
     }
+
     public String getname(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();
