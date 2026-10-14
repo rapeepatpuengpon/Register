@@ -54,7 +54,7 @@ public class SelectionAdmin extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) { 
         if (e.getSource()==add) {
             add.setEnabled(false);
-            new AddAdmin(this,currentuser);
+            new AddAdmin(this);
         }
         if (e.getSource()==drop) {
             drop.setEnabled(false);
