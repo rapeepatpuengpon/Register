@@ -30,7 +30,7 @@ public class Repeal extends JFrame implements ActionListener{
        headpanel = new JPanel();
        headpanel.setLayout(new GridBagLayout());
        headpanel.setPreferredSize(new Dimension(1500,200));
-       headpanel.setBackground(Color.GREEN);
+       headpanel.setBackground(Color.LIGHT_GRAY);
 
        centerpanel = new JPanel();
        centerpanel.setLayout(new GridBagLayout());
@@ -67,8 +67,8 @@ public class Repeal extends JFrame implements ActionListener{
 
     GridBagConstraints gcenter = new GridBagConstraints();
     removebutton = new JButton("Remove");
-    removebutton.setFont(new Font("",Font.BOLD,20));
-    removebutton.setBackground(Color.GREEN);
+    removebutton.setFont(new Font("",Font.BOLD,16));
+    removebutton.setBackground(Color.CYAN);
     gcenter.gridx = 0;
     gcenter.gridy = 0;
     gcenter.anchor = GridBagConstraints.SOUTHEAST;
@@ -134,20 +134,18 @@ public class Repeal extends JFrame implements ActionListener{
             JOptionPane.showMessageDialog(this, "Please select subject");
             return;
         } 
-        String codetoRemove = group.getSelection().getActionCommand(); // จะดึงค่ารหัสวิชาที่กดเลือก
-        ArrayList<String> keep = new ArrayList<>(); //สร้างมาเพื่ออ่านไฟล์ไปเก็บไว้ในลิสต์
+        String codetoRemove = group.getSelection().getActionCommand(); 
+        ArrayList<String> keep = new ArrayList<>(); 
         try(BufferedReader br = new BufferedReader(new FileReader("./Lib/sub_regis.csv"))) {
             String line;
             while ((line = br.readLine())!= null) {
                 String[] data = line.split(",");
-                //อ่านค่าในไฟล์แล้วบรรทัดไหนที่ไม่ถูกเลือกจะเอาไปเก็บใน keep เป็นลิสต์ที่สร้างมาเก็บ
                 boolean target = data.length >= 2 && data[0].trim().equals(currentuser.trim())&&data[1].trim().equals(codetoRemove);
                 if (!target) keep.add(line);
             }
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-        // เขียนไฟล์ที่เก็บไว้ในลิสต์ keep คืน
         try(BufferedWriter bw = new BufferedWriter(new FileWriter("./Lib/sub_regis.csv"))) {
             for(String l : keep){ 
                 bw.write(l);

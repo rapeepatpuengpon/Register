@@ -31,7 +31,7 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
        headpanel = new JPanel();
        headpanel.setLayout(new GridBagLayout());
        headpanel.setPreferredSize(new Dimension(1500,200));
-       headpanel.setBackground(Color.GREEN);
+       headpanel.setBackground(Color.LIGHT_GRAY);
 
        centerpanel = new JPanel();
        centerpanel.setLayout(new GridBagLayout());
@@ -67,8 +67,8 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
 
     GridBagConstraints gcenter = new GridBagConstraints();
     removebutton = new JButton("Remove");
-    removebutton.setFont(new Font("",Font.BOLD,30));
-    removebutton.setBackground(Color.GREEN);
+    removebutton.setFont(new Font("",Font.BOLD,20));
+    removebutton.setBackground(Color.WHITE);
     gcenter.gridx = 0;
     gcenter.gridy = 0;
     gcenter.anchor = GridBagConstraints.SOUTH;
@@ -77,10 +77,10 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
 
     GridBagConstraints gcombo = new GridBagConstraints();
     comboBox = new JComboBox<>(new String[]{"1","2","3","4"});
-    comboBox.setFont(new Font("",Font.BOLD,30));
+    comboBox.setFont(new Font("",Font.BOLD,20));
     gcombo.gridx = 0;
     gcombo.gridy = 0;
-    gcombo.insets = new Insets(25, 100, 0, 0);
+    gcombo.insets = new Insets(30, 100, 0, 0);
     gcombo.anchor = GridBagConstraints.NORTHWEST;
     centerpanel.add(comboBox,gcombo);
     

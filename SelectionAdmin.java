@@ -23,15 +23,15 @@ public class SelectionAdmin extends JFrame implements ActionListener{
     }
     public void setComponent(){
         selection = new JLabel("Select");
-        selection.setBounds(250, 20, 300, 50);
+        selection.setBounds(245, 20, 300, 50);
         selection.setFont(new Font("",Font.BOLD,30));
 
         add = new JButton("AddSubject");
-        add.setBounds(70, 100, 130, 50);
+        add.setBounds(140, 100, 130, 50);
         add.setFont(new Font("",Font.BOLD,12));
 
         drop = new JButton("Repeal");
-        drop.setBounds(230, 100, 130, 50);
+        drop.setBounds(310, 100, 130, 50);
         drop.setFont(new Font("",Font.BOLD,12));
 
         panel.setBounds(0,0,600,300);
