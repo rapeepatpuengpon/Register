@@ -4,9 +4,9 @@ import javax.swing.*;
 
 public class SelectionAdmin extends JFrame implements ActionListener{
     Container cp;
-    JPanel panel;
+    JPanel panel,panel2;
     JLabel selection;
-    JButton add,drop;
+    JButton add,drop,logout;
     String currentuser;
     public SelectionAdmin(String user){
         this.currentuser = user;
@@ -16,49 +16,67 @@ public class SelectionAdmin extends JFrame implements ActionListener{
     }
     public void Intitial(){
         cp = this.getContentPane();
-        cp.setBackground(Color.WHITE);
-        cp.setLayout(null);
-        panel = new JPanel();
+        
+        panel = new BackgroundPanel("./Image/BackgroundSelection3.png");
         panel.setLayout(null);
+
+        
     }
     public void setComponent(){
         selection = new JLabel("Select");
-        selection.setBounds(245, 20, 300, 50);
+        selection.setBounds(250, 30, 300, 50);
         selection.setFont(new Font("",Font.BOLD,30));
-
-        add = new JButton("AddSubject");
+        
+        ImageIcon iconAdd = new ImageIcon("./Image/button_addsubject (1).png");
+        Image scaled = iconAdd.getImage().getScaledInstance(150, 56, Image.SCALE_SMOOTH);
+        add = new JButton(new ImageIcon(scaled));
         add.setBounds(140, 100, 130, 50);
-        add.setFont(new Font("",Font.BOLD,12));
-
-        drop = new JButton("Repeal");
-        drop.setBounds(310, 100, 130, 50);
+        
+        ImageIcon iconRepeal = new ImageIcon("./Image/button_repeal.png");
+        Image scaledRepeal = iconRepeal.getImage().getScaledInstance(145, 58, Image.SCALE_SMOOTH);
+        drop = new JButton(new ImageIcon(scaledRepeal));
+        drop.setBounds(320, 100, 130, 50);
         drop.setFont(new Font("",Font.BOLD,12));
+
+        ImageIcon iconLogout = new ImageIcon("./Image/LogoutIcon.png");
+        Image scaledLogout = iconLogout.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        logout = new JButton(new ImageIcon(scaledLogout));
+        logout.setBounds(540, 10, 30, 30);
+
 
         panel.setBounds(0,0,600,300);
         panel.add(selection);
         panel.add(add);
         panel.add(drop);
+        panel.add(logout);
         add.addActionListener(this);
         drop.addActionListener(this);
+        logout.addActionListener(this);
         cp.add(panel);
 
     }
     public void setupFrame(){
-
         this.setSize(600, 250);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setVisible(true);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     public void actionPerformed(ActionEvent e) { 
+         if (e.getSource() == logout) {
+            int confirm = JOptionPane.showConfirmDialog(this, "Do you want to logout?", "Confirm Logout",JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                this.dispose();
+                new Login();
+            }
+        }
         if (e.getSource()==add) {
             add.setEnabled(false);
             new AddAdmin(this);
         }
         if (e.getSource()==drop) {
             drop.setEnabled(false);
-            new RemoveSubjectAdmin(this,currentuser);
+            new RemoveSubjectAdmin(this);
         }
     }
     public void enableAddButton() {

@@ -31,15 +31,15 @@ public class Add extends JFrame implements ActionListener {
         cp.setLayout(new BorderLayout());
         cp.setBackground(Color.WHITE);
 
-        headPanel = new JPanel();
+        headPanel = new BackgroundPanel("./Image/BlueIcon.png");
         headPanel.setLayout(new GridBagLayout());
         headPanel.setPreferredSize(new Dimension(1000, 200));
-        headPanel.setBackground(Color.white);
 
-        bodyPanel = new JPanel(new GridBagLayout());
-        bodyPanel.setBackground(Color.white);
-
+        bodyPanel = new BackgroundPanel("./Image/Background.jpg");
+        bodyPanel.setLayout(new GridBagLayout());
+       
         listPanel = new JPanel(new GridBagLayout());
+        listPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         listPanel.setBackground(Color.WHITE);
     }
 
@@ -47,6 +47,7 @@ public class Add extends JFrame implements ActionListener {
         GridBagConstraints ghead = new GridBagConstraints();
         regis = new JLabel("Registration");
         regis.setFont(new Font("", Font.BOLD, 40));
+        regis.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 0;
         ghead.weightx = 1;
@@ -54,6 +55,7 @@ public class Add extends JFrame implements ActionListener {
         headPanel.add(regis, ghead);
 
         user = new JLabel(getusername());
+        user.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 1;
         ghead.anchor = GridBagConstraints.WEST;
@@ -62,6 +64,7 @@ public class Add extends JFrame implements ActionListener {
         headPanel.add(user, ghead);
 
         name = new JLabel(getname(getusername()));
+        name.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 2;
         ghead.anchor = GridBagConstraints.WEST;
@@ -70,6 +73,7 @@ public class Add extends JFrame implements ActionListener {
         headPanel.add(name, ghead);
 
         year = new JLabel("Year :" + getyear(currentuser));
+        year.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 3;
         ghead.anchor = GridBagConstraints.WEST;
@@ -84,13 +88,18 @@ public class Add extends JFrame implements ActionListener {
         gbody.gridx = 0;
         gbody.gridy = 0;
         bodyPanel.add(scrollPane, gbody);
-
-        add = new JButton("Add");
+        
+        ImageIcon iconAdd = new ImageIcon("./Image/button_add.png");
+        Image scaled = iconAdd.getImage().getScaledInstance(150, 60, Image.SCALE_SMOOTH);
+        add = new JButton(new ImageIcon(scaled));
+        add.setPreferredSize(new Dimension(100,40));
         gbody.gridx = 0;
         gbody.gridy = 1;
         gbody.anchor = GridBagConstraints.EAST;
-        gbody.insets = new Insets(15, 0, 100, 0);
+        gbody.insets = new Insets(15, 0, 70, 0);
         bodyPanel.add(add, gbody);
+
+
 
         add.addActionListener(this);
 
@@ -130,13 +139,13 @@ public class Add extends JFrame implements ActionListener {
                 int weight = Integer.parseInt(data[2]);
 
                 if (checkduplicatesubject(currentuser, getsubject())) {
-                    JOptionPane.showMessageDialog(this,"Subject Duplicate");
+                  JOptionPane.showMessageDialog(this,"Subject Duplicate");
                     return;
                 }
 
                 int currentweight = countweight(getusername());
                 if(currentweight + weight > 21) {
-                    JOptionPane.showMessageDialog(this, "More than 21 credits");
+                  JOptionPane.showMessageDialog(this,"more than 21 credit");
                     return ;
                 }
 
@@ -144,9 +153,9 @@ public class Add extends JFrame implements ActionListener {
 
                 loadSubjects(getyear(currentuser));
 
-                JOptionPane.showMessageDialog(this, "Add Complete");
+                JOptionPane.showMessageDialog(this,"Add Complete");
             } else {
-                JOptionPane.showMessageDialog(this, "Please Choose Subject");
+                JOptionPane.showMessageDialog(this,"Please choose subject");
             }
 
         }
@@ -251,7 +260,6 @@ public class Add extends JFrame implements ActionListener {
         listPanel.revalidate();
         listPanel.repaint();
     }
-
     public void savesubject(String user, String code, String subject, int weight, String year) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("Lib/sub_regis.csv", true))) {
             bw.write(user + "," + code + "," + subject + "," + weight + "," + year);
@@ -260,11 +268,9 @@ public class Add extends JFrame implements ActionListener {
             e3.printStackTrace();
         }
     }
-
     public String getusername() {
         return currentuser;
     }
-
     public String getname(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();

@@ -23,52 +23,57 @@ public class MyList extends JFrame {
     public void Intitial() {
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout());
-        panelhead = new JPanel();
+        panelhead = new BackgroundPanel("./Image/BlueIcon.png");
         panelhead.setLayout(new GridBagLayout());
         panelhead.setPreferredSize(new Dimension(1000, 200));
 
-        wrappanel = new JPanel();
+        wrappanel = new BackgroundPanel("./Image/Background.jpg");
         wrappanel.setLayout(new GridBagLayout());
 
         panelbody = new JPanel();
         panelbody.setLayout(new GridBagLayout());
-        panelbody.setBackground(Color.LIGHT_GRAY);
+        panelbody.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        panelbody.setBackground(Color.WHITE);
 
     }
-
     public void setComponent() {
 
         GridBagConstraints ghead = new GridBagConstraints();
         JLabel mylist = new JLabel("My List");
         mylist.setFont(new Font("", Font.BOLD, 40));
+        mylist.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 0;
         ghead.weightx = 1;
+        ghead.insets = new Insets(10, 0, 0, 0);
         ghead.anchor = GridBagConstraints.CENTER;
         panelhead.add(mylist, ghead);
 
         JLabel user = new JLabel(getusername());
+        user.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 1;
         ghead.anchor = GridBagConstraints.WEST;
         user.setFont(new Font("", Font.BOLD, 30));
-        ghead.insets = new Insets(15, 100, 0, 0);
+        ghead.insets = new Insets(5, 100, 0, 0);
         panelhead.add(user, ghead);
 
         JLabel name = new JLabel(getname(getusername()));
+        name.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 2;
         ghead.anchor = GridBagConstraints.WEST;
         name.setFont(new Font("", Font.BOLD, 30));
-        ghead.insets = new Insets(10, 100, 0, 0);
+        ghead.insets = new Insets(5, 100, 0, 0);
         panelhead.add(name, ghead);
 
         JLabel year = new JLabel("Year :" + getyear(getusername()));
+        year.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 3;
         ghead.anchor = GridBagConstraints.WEST;
         year.setFont(new Font("", Font.BOLD, 25));
-        ghead.insets = new Insets(10, 100, 0, 0);
+        ghead.insets = new Insets(5, 100, 0, 0);
         panelhead.add(year, ghead);
 
         GridBagConstraints gwrap = new GridBagConstraints();
@@ -77,14 +82,16 @@ public class MyList extends JFrame {
         scrollPane.setPreferredSize(new Dimension(800, 400));
         gwrap.gridx = 0;
         gwrap.gridy = 0;
+        gwrap.insets = new Insets(20, 0, 20, 0);
         wrappanel.add(scrollPane, gwrap);
 
         weightlabel = new JLabel("Total Weight : " + calweight(getusername()));
+
         gwrap.gridx = 0;
         gwrap.gridy = 1;
         gwrap.anchor = GridBagConstraints.EAST;
         gwrap.insets = new Insets(0, 0, 60, 20);
-        weightlabel.setFont(new Font("", Font.BOLD, 15));
+        weightlabel.setFont(new Font("", Font.BOLD, 25));
         wrappanel.add(weightlabel, gwrap);
 
         writesubject(this.user);
@@ -180,7 +187,6 @@ public class MyList extends JFrame {
                     JLabel labelweight = new JLabel(weight);
                     labelweight.setFont(new Font("", Font.PLAIN, 20));
                     panelbody.add(labelweight, glabel);
-
                     row++;
                 }
             }

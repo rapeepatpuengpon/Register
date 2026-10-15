@@ -15,9 +15,8 @@ public class AddAdmin extends JFrame implements ActionListener {
     SelectionAdmin menu;
     String currentuser;
 
-    public AddAdmin(SelectionAdmin menu,String user) {
+    public AddAdmin(SelectionAdmin menu) {
         this.menu = menu;
-        this.currentuser = user;
         Intitial();
         setComponent();
         setupFrame();
@@ -26,20 +25,22 @@ public class AddAdmin extends JFrame implements ActionListener {
     public void Intitial() {
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout());
-        panelhead = new JPanel();
+        panelhead = new BackgroundPanel("./Image/BlueIcon.png");
         panelhead.setLayout(new GridBagLayout());
         panelhead.setPreferredSize(new Dimension(1000, 150));
 
-        wrappanel = new JPanel();
+        wrappanel = new BackgroundPanel("./Image/Background.jpg");
         wrappanel.setLayout(new GridBagLayout());
 
         panelbody = new JPanel();
         panelbody.setLayout(new GridBagLayout());
-        panelbody.setBackground(Color.LIGHT_GRAY);
+        panelbody.setBackground(Color.WHITE);
+        panelbody.setBorder(BorderFactory.createLineBorder(Color.black,1));
 
         paneladd = new JPanel();
         paneladd.setLayout(new GridBagLayout());
-        paneladd.setBackground(Color.lightGray);
+        paneladd.setBackground(Color.WHITE);
+        paneladd.setBorder(BorderFactory.createLineBorder(Color.black,1));
         paneladd.setPreferredSize(new Dimension(250, 350));
 
     }
@@ -47,8 +48,9 @@ public class AddAdmin extends JFrame implements ActionListener {
     public void setComponent() {
 
         GridBagConstraints ghead = new GridBagConstraints();
-        JLabel add = new JLabel("Add");
+        JLabel add = new JLabel("AddSubject");
         add.setFont(new Font("", Font.BOLD, 40));
+        add.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 0;
         ghead.weightx = 1;
@@ -56,7 +58,6 @@ public class AddAdmin extends JFrame implements ActionListener {
         panelhead.add(add, ghead);
 
         GridBagConstraints gwrap = new GridBagConstraints();
-
         boxyear.addItem("1");
         boxyear.addItem("2");
         boxyear.addItem("3");
@@ -75,9 +76,11 @@ public class AddAdmin extends JFrame implements ActionListener {
         gwrap.gridy = 1;
         gwrap.anchor = GridBagConstraints.CENTER;
         wrappanel.add(scrollPane, gwrap);
-
+ 
         gwrap.insets = new Insets(10, 0, 50, 0);
-        addsubject = new JButton("Add");
+        ImageIcon iconAdd = new ImageIcon("./Image/button_add.png");
+        Image scaledAdd = iconAdd.getImage().getScaledInstance(130, 50, Image.SCALE_SMOOTH);
+        addsubject = new JButton(new ImageIcon(scaledAdd));
         gwrap.gridx = 1;
         gwrap.gridy = 2;
         gwrap.anchor = GridBagConstraints.EAST;

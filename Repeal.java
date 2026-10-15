@@ -5,82 +5,108 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-public class Repeal extends JFrame implements ActionListener{
+public class Repeal extends JFrame implements ActionListener {
     Container cp;
-    JPanel headpanel,centerpanel,removepanel;
-    JLabel repeal;
+    JPanel headpanel, centerpanel, removepanel;
+    JLabel repeal,user,name,year,head,weight,currentweight;
     JButton removebutton;
     ButtonGroup group;
     JScrollPane scrollpane;
     SelectionMenu menu;
     String currentuser;
 
-    public Repeal(SelectionMenu menu,String user){
+    public Repeal(SelectionMenu menu, String user) {
         this.menu = menu;
         this.currentuser = user;
         Intitial();
         setComponent();
         setupFrame();
     }
-    public void Intitial(){
-       cp = this.getContentPane();
-       cp.setBackground(Color.WHITE);
-       cp.setLayout(new BorderLayout());
 
-       headpanel = new JPanel();
-       headpanel.setLayout(new GridBagLayout());
-       headpanel.setPreferredSize(new Dimension(1500,200));
-       headpanel.setBackground(Color.LIGHT_GRAY);
+    public void Intitial() {
+        cp = this.getContentPane();
+        cp.setBackground(Color.WHITE);
+        cp.setLayout(new BorderLayout());
 
-       centerpanel = new JPanel();
-       centerpanel.setLayout(new GridBagLayout());
-       centerpanel.setPreferredSize(new Dimension(200,200));
-       centerpanel.setBackground(Color.LIGHT_GRAY);
-    
-       removepanel = new JPanel();
-       removepanel.setLayout(new GridBagLayout());  
-       removepanel.setBackground(Color.WHITE);
+        headpanel = new BackgroundPanel("./Image/BlueIcon.png");
+        headpanel.setLayout(new GridBagLayout());
+        headpanel.setPreferredSize(new Dimension(1500, 200));
+        headpanel.setBackground(Color.LIGHT_GRAY);
+
+        centerpanel = new BackgroundPanel("./Image/Background.jpg");
+        centerpanel.setLayout(new GridBagLayout());
+        centerpanel.setPreferredSize(new Dimension(200, 200));
+        centerpanel.setBackground(Color.WHITE);
+
+        removepanel = new JPanel();
+        removepanel.setLayout(new GridBagLayout());
+        removepanel.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+        removepanel.setBackground(Color.WHITE);
     }
-                                                                                                                                                                                                                                                                                                             
-    public void setComponent(){
-        
+
+    public void setComponent() {
+
         GridBagConstraints ghead = new GridBagConstraints();
         repeal = new JLabel("Repeal");
-        repeal.setFont(new Font("",Font.BOLD,40));
+        repeal.setFont(new Font("", Font.BOLD, 40));
+        repeal.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 0;
-        headpanel.add(repeal,ghead);
-        cp.add(headpanel,BorderLayout.NORTH);
+        ghead.weightx = 1;
+        headpanel.add(repeal, ghead);
+        cp.add(headpanel, BorderLayout.NORTH);
 
-    
-    scrollpane = new JScrollPane(removepanel);
-    scrollpane.setPreferredSize(new Dimension(700, 500));
+        user = new JLabel(getusername());
+        user.setForeground(Color.WHITE);
+        ghead.gridx = 0;
+        ghead.gridy = 1;
+        ghead.insets = new Insets(0, 140, 0, 0);
+        ghead.anchor = GridBagConstraints.WEST;
+        user.setFont(new Font("", Font.BOLD, 30));
+        headpanel.add(user, ghead);
 
-    GridBagConstraints gremove = new GridBagConstraints();
-    gremove.gridx = 0;
-    gremove.gridy = 0;
-    gremove.weightx = 1;
-    gremove.weighty = 1;
-    gremove.fill = GridBagConstraints.BOTH;
-    gremove.insets = new Insets(60, 100, 150, 100);
-    centerpanel.add(scrollpane, gremove);
+        name = new JLabel(getname(getusername()));
+        name.setForeground(Color.WHITE);
+        ghead.gridx = 0;
+        ghead.gridy = 2;
+        ghead.anchor = GridBagConstraints.WEST;
+        name.setFont(new Font("", Font.BOLD, 30));
+        headpanel.add(name, ghead);
 
-    GridBagConstraints gcenter = new GridBagConstraints();
-    removebutton = new JButton("Remove");
-    removebutton.setFont(new Font("",Font.BOLD,16));
-    removebutton.setBackground(Color.CYAN);
-    gcenter.gridx = 0;
-    gcenter.gridy = 0;
-    gcenter.anchor = GridBagConstraints.SOUTHEAST;
-    gcenter.insets = new Insets(0, 50, 100, 100);
-    centerpanel.add(removebutton,gcenter);
+        year = new JLabel("Year :" + getyear(getusername()));
+        year.setForeground(Color.WHITE);
+        ghead.gridx = 0;
+        ghead.gridy = 3;
+        ghead.anchor = GridBagConstraints.WEST;
+        year.setFont(new Font("", Font.BOLD, 25));
+        headpanel.add(year, ghead);
 
-    cp.add(centerpanel, BorderLayout.CENTER);
-    removebutton.addActionListener(this);
-    
-    loadSubjects(currentuser);
+        GridBagConstraints gremove = new GridBagConstraints();
+        scrollpane = new JScrollPane(removepanel);
+        scrollpane.setPreferredSize(new Dimension(700, 350));
+        gremove.gridx = 0;
+        gremove.gridy = 3;
+        gremove.insets = new Insets(15, 0, 0, 0);
+        centerpanel.add(scrollpane, gremove);
+        
+        ImageIcon iconRemove = new ImageIcon("./Image/button_remove.png");
+        Image scaledRemove = iconRemove.getImage().getScaledInstance(140, 60, Image.SCALE_SMOOTH);
+        removebutton = new JButton(new ImageIcon(scaledRemove));
+        removebutton.setFont(new Font("", Font.BOLD, 20));
+        removebutton.setPreferredSize(new Dimension(100,40));
+        gremove.gridx = 0;
+        gremove.gridy = 4;
+        gremove.anchor = GridBagConstraints.EAST;
+        gremove.insets = new Insets(15, 0, 50, 0);
+        centerpanel.add(removebutton, gremove);
+
+        cp.add(centerpanel, BorderLayout.CENTER);
+        removebutton.addActionListener(this);
+
+        loadSubjects(currentuser);
     }
-    public void setupFrame(){
+
+    public void setupFrame() {
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -92,62 +118,172 @@ public class Repeal extends JFrame implements ActionListener{
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
-    public void loadSubjects(String user){
-    removepanel.removeAll();
-    group = new ButtonGroup();
 
-    GridBagConstraints g = new GridBagConstraints();
-    g.gridx = 0;
-    g.anchor = GridBagConstraints.NORTHWEST;  
-    g.weightx = 1;                             
-    g.fill = GridBagConstraints.HORIZONTAL;
-    int row = 0;
+    public void loadSubjects(String user) {
+        removepanel.removeAll();
+        group = new ButtonGroup();
 
-    try (BufferedReader br = new BufferedReader(new FileReader("./Lib/sub_regis.csv"))) {
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] data = line.split(",", -1);
+        GridBagConstraints g = new GridBagConstraints();
+        g.anchor = GridBagConstraints.WEST;
+        int row = 0;
 
-            if (data.length >= 4 && data[0].trim().equals(user.trim())) {
-                String code = data[1].trim();
-                String subject = data[2].trim();
+        head = new JLabel("Code | Subject - Weight");
+        g.gridx = 0;
+        g.gridy = 0;
+        head.setFont(new Font("", Font.BOLD, 25));
+        removepanel.add(head, g);
 
-                JRadioButton radio = new JRadioButton(code + " - " + subject);
-                radio.setBackground(Color.WHITE);
-                radio.setFont(new Font("", Font.BOLD, 20));
-                radio.setActionCommand(code);
-                group.add(radio);
-                g.gridy = row++;               
-                removepanel.add(radio, g);     
-            }
-        }
-        g.weighty = 1;
-        removepanel.add(new JLabel(""),g);
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    removepanel.revalidate();
-    removepanel.repaint();
-}
-    public void actionPerformed(ActionEvent e2) {
-        if (group == null ||group.getSelection()==null) {
-            JOptionPane.showMessageDialog(this, "Please select subject");
-            return;
-        } 
-        String codetoRemove = group.getSelection().getActionCommand(); 
-        ArrayList<String> keep = new ArrayList<>(); 
-        try(BufferedReader br = new BufferedReader(new FileReader("./Lib/sub_regis.csv"))) {
+        weight = new JLabel("Weight");
+        g.gridx = 1;
+        g.gridy = 0;
+        weight.setFont(new Font("", Font.BOLD, 20));
+        g.insets = new Insets(0, 0, 0, 80);
+        removepanel.add(weight, g);
+
+        currentweight = new JLabel(countweight(getusername()) + "");
+        g.gridx = 1;
+        g.gridy = 1;
+        currentweight.setFont(new Font("", Font.BOLD, 20));
+        g.anchor = GridBagConstraints.CENTER;
+        removepanel.add(currentweight, g);
+
+        g.anchor = GridBagConstraints.WEST;
+
+        try (BufferedReader br = new BufferedReader(new FileReader("./Lib/sub_regis.csv"))) {
             String line;
-            while ((line = br.readLine())!= null) {
+            while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                boolean target = data.length >= 2 && data[0].trim().equals(currentuser.trim())&&data[1].trim().equals(codetoRemove);
-                if (!target) keep.add(line);
+
+                if (data.length >= 4 && data[0].trim().equals(user.trim())) {
+                    String code = data[1].trim();
+                    String subject = data[2].trim();
+                    String weight = data[3].trim();
+
+                    JRadioButton radio = new JRadioButton(code + " | " + subject + " - " + weight );
+                     g.gridy = row + 1;
+
+                    g.gridx = 0;
+                    g.weightx = 1;
+                    radio.setBackground(Color.WHITE);
+                    radio.setFont(new Font("", Font.BOLD, 20));
+                    radio.setActionCommand(code);
+                    group.add(radio);
+                    removepanel.add(radio, g);
+                    row++;
+                }
+            }
+            g.gridx = 0;
+            g.gridy = row + 1;
+            g.weighty = 1;
+            removepanel.add(new JLabel(""), g);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        removepanel.revalidate();
+        removepanel.repaint();
+    }
+
+    public String getusername() {
+        return currentuser;
+    }
+
+    public String getname(String user) {
+        try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
+            br.readLine();
+            String s;
+            while ((s = br.readLine()) != null) {
+                String data[] = s.split(",");
+
+                if (data[0].equals(user)) {
+                    return data[1];
+                }
+
             }
         } catch (Exception e1) {
             e1.printStackTrace();
         }
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter("./Lib/sub_regis.csv"))) {
-            for(String l : keep){ 
+        return "";
+    }
+    public int countweight(String user) {
+        int total = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
+            String s;
+            while ((s = br.readLine()) != null) {
+                String data[] = s.split(",");
+                // โครงสร้างไฟล์: user, code, subject, weight, year
+                if (data[0].equals(user)) {
+                    total += Integer.parseInt(data[3].trim());
+                }
+            }
+        } catch (Exception ew) {
+            ew.printStackTrace();
+        }
+        return total;
+    }
+
+    public String getyear(String user) {
+        try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
+            br.readLine();
+            String s;
+            while ((s = br.readLine()) != null) {
+                String data[] = s.split(",");
+
+                if (data[0].equals(user)) {
+                    return data[4];
+                }
+
+            }
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return "";
+    }
+    public int countsubject(String user) {
+        int count = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
+            String s;
+            while ((s = br.readLine()) != null) {
+                String data[] = s.split(",");
+                // โครงสร้างไฟล์: user, code, subject, weight, year
+                if (data[0].equals(user)) {
+                    count++;
+                }
+            }
+        } catch (Exception ew) {
+            ew.printStackTrace();
+        }
+        return count;
+    }
+    public void actionPerformed(ActionEvent e2) {
+        if (group == null || group.getSelection() == null) {
+            JOptionPane.showMessageDialog(this, "Please select subject");
+            return;
+        }
+
+        else if (countsubject(currentuser) <= 1) {
+            JOptionPane.showMessageDialog(this, "Subject much have more 1");
+            return;
+        }
+
+        String codetoRemove = group.getSelection().getActionCommand(); // จะดึงค่ารหัสวิชาที่กดเลือก
+        ArrayList<String> keep = new ArrayList<>(); // สร้างมาเพื่ออ่านไฟล์ไปเก็บไว้ในลิสต์
+        try (BufferedReader br = new BufferedReader(new FileReader("./Lib/sub_regis.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+                // อ่านค่าในไฟล์แล้วบรรทัดไหนที่ไม่ถูกเลือกจะเอาไปเก็บใน keep
+                // เป็นลิสต์ที่สร้างมาเก็บ
+                boolean target = data.length >= 2 && data[0].trim().equals(currentuser.trim())
+                        && data[1].trim().equals(codetoRemove);
+                if (!target)
+                    keep.add(line);
+            }
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        // เขียนไฟล์ที่เก็บไว้ในลิสต์ keep คืน
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("./Lib/sub_regis.csv"))) {
+            for (String l : keep) {
                 bw.write(l);
                 bw.newLine();
             }
@@ -155,6 +291,7 @@ public class Repeal extends JFrame implements ActionListener{
             e1.printStackTrace();
         }
         loadSubjects(currentuser);
-        JOptionPane.showMessageDialog(this,"Success");
+        JOptionPane.showMessageDialog(this, "Success");
     }
+
 }
