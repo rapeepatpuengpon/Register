@@ -26,10 +26,9 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
        cp.setBackground(Color.WHITE);
        cp.setLayout(new BorderLayout());
 
-       headpanel = new JPanel();
+       headpanel = new BackgroundPanel("./Image/GreenBackground.png");
        headpanel.setLayout(new GridBagLayout());
        headpanel.setPreferredSize(new Dimension(100,150));
-       headpanel.setBackground(Color.LIGHT_GRAY);
 
        centerpanel = new JPanel();
        centerpanel.setLayout(new GridBagLayout());
@@ -38,13 +37,13 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
     
        removepanel = new JPanel();
        removepanel.setLayout(new GridBagLayout());   
-       removepanel.setBackground(Color.LIGHT_GRAY);
+       removepanel.setBackground(Color.WHITE);
     }
                                                                                                                                                                                                                                                                                                              
     public void setComponent(){
-        
     GridBagConstraints ghead = new GridBagConstraints();
     repeal = new JLabel("Repeal");
+    repeal.setForeground(Color.white);
     repeal.setFont(new Font("",Font.BOLD,40));
     ghead.gridx = 0;
     ghead.gridy = 0;
@@ -115,7 +114,7 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
                     String subject = data[1].trim();
                     String weight = data[2].trim();
                     JRadioButton radio = new JRadioButton(code + " |  " + subject + " - " + weight + "  weight");
-                    radio.setBackground(Color.LIGHT_GRAY);
+                    radio.setBackground(Color.WHITE);
                     radio.setFont(new Font("", Font.BOLD, 20));
                     radio.setActionCommand(code);
                     group.add(radio);

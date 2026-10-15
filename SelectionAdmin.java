@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class SelectionAdmin extends JFrame implements ActionListener{
     Container cp;
-    JPanel panel;
+    JPanel panel,panel2;
     JLabel selection;
     JButton add,drop,logout;
     String currentuser;
@@ -16,14 +16,15 @@ public class SelectionAdmin extends JFrame implements ActionListener{
     }
     public void Intitial(){
         cp = this.getContentPane();
-        cp.setBackground(Color.WHITE);
-        cp.setLayout(null);
-        panel = new JPanel();
+        
+        panel = new BackgroundPanel("./Image/BackgroundSelection3.png");
         panel.setLayout(null);
+
+        
     }
     public void setComponent(){
         selection = new JLabel("Select");
-        selection.setBounds(250, 20, 300, 50);
+        selection.setBounds(250, 30, 300, 50);
         selection.setFont(new Font("",Font.BOLD,30));
 
         add = new JButton("AddSubject");
@@ -35,7 +36,7 @@ public class SelectionAdmin extends JFrame implements ActionListener{
         drop.setFont(new Font("",Font.BOLD,12));
 
         logout = new JButton("Logout");
-        logout.setBounds(500, 10, 50, 20);
+        logout.setBounds(510, 20, 60, 20);
         logout.setFont(new Font("", Font.BOLD, 5));
 
         panel.setBounds(0,0,600,300);

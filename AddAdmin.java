@@ -25,7 +25,7 @@ public class AddAdmin extends JFrame implements ActionListener {
     public void Intitial() {
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout());
-        panelhead = new JPanel();
+        panelhead = new BackgroundPanel("./Image/GreenBackground.png");
         panelhead.setLayout(new GridBagLayout());
         panelhead.setPreferredSize(new Dimension(1000, 150));
 
@@ -34,11 +34,11 @@ public class AddAdmin extends JFrame implements ActionListener {
 
         panelbody = new JPanel();
         panelbody.setLayout(new GridBagLayout());
-        panelbody.setBackground(Color.LIGHT_GRAY);
+        panelbody.setBackground(Color.WHITE);
 
         paneladd = new JPanel();
         paneladd.setLayout(new GridBagLayout());
-        paneladd.setBackground(Color.lightGray);
+        paneladd.setBackground(Color.WHITE);
         paneladd.setPreferredSize(new Dimension(250, 350));
 
     }
@@ -48,6 +48,7 @@ public class AddAdmin extends JFrame implements ActionListener {
         GridBagConstraints ghead = new GridBagConstraints();
         JLabel add = new JLabel("Add");
         add.setFont(new Font("", Font.BOLD, 40));
+        add.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 0;
         ghead.weightx = 1;
@@ -73,9 +74,11 @@ public class AddAdmin extends JFrame implements ActionListener {
         gwrap.gridy = 1;
         gwrap.anchor = GridBagConstraints.CENTER;
         wrappanel.add(scrollPane, gwrap);
-
+ 
         gwrap.insets = new Insets(10, 0, 50, 0);
-        addsubject = new JButton("Add");
+        ImageIcon iconRepeal = new ImageIcon("./Image/AddAdminIcon.png");
+        Image scaledAdd = iconRepeal.getImage().getScaledInstance(130, 50, Image.SCALE_SMOOTH);
+        addsubject = new JButton(new ImageIcon(scaledAdd));
         gwrap.gridx = 1;
         gwrap.gridy = 2;
         gwrap.anchor = GridBagConstraints.EAST;

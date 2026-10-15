@@ -24,7 +24,7 @@ public class Login extends JFrame implements ActionListener {
     }
 
     public void Intitial() {
-        BackgroundPanel bgPanel = new BackgroundPanel("./Image/image.png");
+        BackgroundPanel bgPanel = new BackgroundPanel("./Image/BackgroundLogin.png");
         bgPanel.setLayout(null);
         setContentPane(bgPanel);
         cp = this.getContentPane();
@@ -51,9 +51,9 @@ public class Login extends JFrame implements ActionListener {
         pass.setBounds(50, 120, 100, 50);
         textpass.setBounds(50, 160, 200, 30);
         pass.setFont(new Font("", Font.BOLD, 16));
+        
         ImageIcon iconlogin = new ImageIcon("./Image/LoginIcon.png");
-        Image scaled = iconlogin.getImage()
-                .getScaledInstance(120, 60, Image.SCALE_SMOOTH);
+        Image scaled = iconlogin.getImage().getScaledInstance(120, 60, Image.SCALE_SMOOTH);
         login = new JButton(new ImageIcon(scaled));
         login.setBounds(100, 240, 100, 40);
 

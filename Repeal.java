@@ -28,9 +28,9 @@ public class Repeal extends JFrame implements ActionListener {
         cp.setBackground(Color.WHITE);
         cp.setLayout(new BorderLayout());
 
-        headpanel = new JPanel();
+        headpanel = new BackgroundPanel("./Image/GreenBackground.png");
         headpanel.setLayout(new GridBagLayout());
-        headpanel.setPreferredSize(new Dimension(1500, 150));
+        headpanel.setPreferredSize(new Dimension(1500, 200));
         headpanel.setBackground(Color.LIGHT_GRAY);
 
         centerpanel = new JPanel();
@@ -40,7 +40,7 @@ public class Repeal extends JFrame implements ActionListener {
 
         removepanel = new JPanel();
         removepanel.setLayout(new GridBagLayout());
-        removepanel.setBackground(Color.LIGHT_GRAY);
+        removepanel.setBackground(Color.WHITE);
     }
 
     public void setComponent() {
@@ -48,46 +48,55 @@ public class Repeal extends JFrame implements ActionListener {
         GridBagConstraints ghead = new GridBagConstraints();
         repeal = new JLabel("Repeal");
         repeal.setFont(new Font("", Font.BOLD, 40));
+        repeal.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 0;
+        ghead.weightx = 1;
         headpanel.add(repeal, ghead);
         cp.add(headpanel, BorderLayout.NORTH);
 
-        GridBagConstraints gremove = new GridBagConstraints();
         user = new JLabel(getusername());
-        ghead.gridx = 0;
-        ghead.gridy = 0;
-        ghead.anchor = GridBagConstraints.WEST;
-        user.setFont(new Font("", Font.BOLD, 30));
-        centerpanel.add(user, ghead);
-
-        name = new JLabel(getname(getusername()));
+        user.setForeground(Color.WHITE);
         ghead.gridx = 0;
         ghead.gridy = 1;
+        ghead.insets = new Insets(0, 140, 0, 0);
         ghead.anchor = GridBagConstraints.WEST;
-        name.setFont(new Font("", Font.BOLD, 30));
-        centerpanel.add(name, ghead);
+        user.setFont(new Font("", Font.BOLD, 30));
+        headpanel.add(user, ghead);
 
-        year = new JLabel("Year :" + getyear(getusername()));
+        name = new JLabel(getname(getusername()));
+        name.setForeground(Color.WHITE);
         ghead.gridx = 0;
         ghead.gridy = 2;
         ghead.anchor = GridBagConstraints.WEST;
-        year.setFont(new Font("", Font.BOLD, 25));
-        centerpanel.add(year, ghead);
+        name.setFont(new Font("", Font.BOLD, 30));
+        headpanel.add(name, ghead);
 
+        year = new JLabel("Year :" + getyear(getusername()));
+        year.setForeground(Color.WHITE);
+        ghead.gridx = 0;
+        ghead.gridy = 3;
+        ghead.anchor = GridBagConstraints.WEST;
+        year.setFont(new Font("", Font.BOLD, 25));
+        headpanel.add(year, ghead);
+
+        GridBagConstraints gremove = new GridBagConstraints();
         scrollpane = new JScrollPane(removepanel);
         scrollpane.setPreferredSize(new Dimension(700, 350));
         gremove.gridx = 0;
         gremove.gridy = 3;
         gremove.insets = new Insets(15, 0, 0, 0);
         centerpanel.add(scrollpane, gremove);
-
-        removebutton = new JButton("Remove");
+        
+        ImageIcon iconRemove = new ImageIcon("./Image/RemoveIcon.png");
+        Image scaledRemove = iconRemove.getImage().getScaledInstance(140, 80, Image.SCALE_SMOOTH);
+        removebutton = new JButton(new ImageIcon(scaledRemove));
         removebutton.setFont(new Font("", Font.BOLD, 20));
+        removebutton.setPreferredSize(new Dimension(100,50));
         gremove.gridx = 0;
         gremove.gridy = 4;
         gremove.anchor = GridBagConstraints.EAST;
-        gremove.insets = new Insets(15, 0, 0, 0);
+        gremove.insets = new Insets(15, 0, 50, 0);
         centerpanel.add(removebutton, gremove);
 
         cp.add(centerpanel, BorderLayout.CENTER);
@@ -154,7 +163,7 @@ public class Repeal extends JFrame implements ActionListener {
 
                     g.gridx = 0;
                     g.weightx = 1;
-                    radio.setBackground(Color.LIGHT_GRAY);
+                    radio.setBackground(Color.WHITE);
                     radio.setFont(new Font("", Font.BOLD, 20));
                     radio.setActionCommand(code);
                     group.add(radio);
@@ -228,12 +237,33 @@ public class Repeal extends JFrame implements ActionListener {
         }
         return "";
     }
-
+    public int countsubject(String user) {
+        int count = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
+            String s;
+            while ((s = br.readLine()) != null) {
+                String data[] = s.split(",");
+                // โครงสร้างไฟล์: user, code, subject, weight, year
+                if (data[0].equals(user)) {
+                    count++;
+                }
+            }
+        } catch (Exception ew) {
+            ew.printStackTrace();
+        }
+        return count;
+    }
     public void actionPerformed(ActionEvent e2) {
         if (group == null || group.getSelection() == null) {
             JOptionPane.showMessageDialog(this, "Please select subject");
             return;
         }
+
+        else if (countsubject(currentuser) <= 1) {
+            JOptionPane.showMessageDialog(this, "Subject much have more 1");
+            return;
+        }
+
         String codetoRemove = group.getSelection().getActionCommand(); // จะดึงค่ารหัสวิชาที่กดเลือก
         ArrayList<String> keep = new ArrayList<>(); // สร้างมาเพื่ออ่านไฟล์ไปเก็บไว้ในลิสต์
         try (BufferedReader br = new BufferedReader(new FileReader("./Lib/sub_regis.csv"))) {
@@ -262,4 +292,5 @@ public class Repeal extends JFrame implements ActionListener {
         loadSubjects(currentuser);
         JOptionPane.showMessageDialog(this, "Success");
     }
+
 }

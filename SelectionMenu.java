@@ -1,5 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 import javax.swing.*;
 
 public class SelectionMenu extends JFrame implements ActionListener {
@@ -18,38 +21,39 @@ public class SelectionMenu extends JFrame implements ActionListener {
 
     public void Intitial() {
         cp = this.getContentPane();
-        cp.setBackground(Color.WHITE);
-        cp.setLayout(null);
-        panel = new JPanel();
+
+        panel = new BackgroundPanel("./Image/BackgroundSelection3.png");
         panel.setLayout(null);
 
-        panel2 = new JPanel();
-        panel2.setLayout(null);
-        panel2.setBackground(Color.RED);
+
+
     }
-
     public void setComponent() {
-        panel2.setBounds(0, 0, 600, 90);
-        panel2.setBackground(Color.blue.brighter());
         selection = new JLabel("Select");
-        selection.setBounds(250, 20, 300, 50);
+        selection.setBounds(250, 30, 300, 50);selection.setForeground(Color.BLACK);
         selection.setFont(new Font("", Font.BOLD, 30));
-        panel2.add(selection);
-
-        add = new JButton("Registration");
+        panel.add(selection);
+        
+        ImageIcon iconRegis = new ImageIcon("./Image/RegistrationIcon.png");
+        Image scaled = iconRegis.getImage().getScaledInstance(150, 60, Image.SCALE_SMOOTH);
+        add = new JButton(new ImageIcon(scaled));
         add.setBounds(70, 120, 130, 50);
         add.setFont(new Font("", Font.BOLD, 12));
-
-        drop = new JButton("Repeal");
+        
+        ImageIcon iconRepeal = new ImageIcon("./Image/RepealIcon.png");
+        Image scaledRepeal = iconRepeal.getImage().getScaledInstance(140, 60, Image.SCALE_SMOOTH);
+        drop = new JButton(new ImageIcon(scaledRepeal));
         drop.setBounds(230, 120, 130, 50);
         drop.setFont(new Font("", Font.BOLD, 12));
-
-        mysubject = new JButton("My list");
+        
+        ImageIcon iconMylist = new ImageIcon("./Image/MylistIcon.png");
+        Image scaledMylist = iconMylist.getImage().getScaledInstance(140, 60, Image.SCALE_SMOOTH);
+        mysubject = new JButton(new ImageIcon(scaledMylist));
         mysubject.setBounds(390, 120, 130, 50);
         mysubject.setFont(new Font("", Font.BOLD, 12));
 
         logout = new JButton("Logout");
-        logout.setBounds(500, 10, 50, 20);
+        logout.setBounds(510, 20, 60, 20);
         logout.setFont(new Font("", Font.BOLD, 7));
 
         panel.setBounds(0, 0, 600, 300);
@@ -57,15 +61,13 @@ public class SelectionMenu extends JFrame implements ActionListener {
         panel.add(drop);
         panel.add(mysubject);
         panel.add(logout);
-
-
-      
+    
 
         add.addActionListener(this);
         mysubject.addActionListener(this);
         drop.addActionListener(this);
         logout.addActionListener(this);
-        cp.add(panel2);cp.add(panel);
+         cp.add(panel);
 
     }
 
@@ -77,7 +79,22 @@ public class SelectionMenu extends JFrame implements ActionListener {
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-
+    public boolean checkrepeal(String user) {
+        boolean nosubject = false;
+        try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
+            String s;
+            while ((s = br.readLine()) != null) {
+                String data[] = s.split(",");
+                if (data[0].equals(user)) {
+                    nosubject = false;
+                    return nosubject;
+                }
+            }
+        } catch (Exception eboo) {
+            eboo.printStackTrace();
+        }
+        return !nosubject;
+    }
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == logout) {
             int confirm = JOptionPane.showConfirmDialog(this, "Do you want to logout?", "Confirm Logout",JOptionPane.YES_NO_OPTION);
@@ -95,8 +112,13 @@ public class SelectionMenu extends JFrame implements ActionListener {
             new MyList(this, currentuser);
         }
         if (e.getSource() == drop) {
-            drop.setEnabled(false);
-            new Repeal(this, currentuser);
+            if (checkrepeal(currentuser)) {
+                JOptionPane.showMessageDialog(this, "Please Add Subject");
+            } else {
+                drop.setEnabled(false);
+                new Repeal(this, currentuser);
+            }
+
         }
     }
 
