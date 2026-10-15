@@ -3,14 +3,15 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+
 public class Login extends JFrame implements ActionListener {
 
     Container cp;
-    JPanel p;
+    JPanel p, bgpanel;
     JLabel regis;
     JLabel user;
     JTextField textuser;
-    JLabel pass,show;
+    JLabel pass, show;
     JPasswordField textpass;
     JCheckBox showpass;
     JButton login;
@@ -23,15 +24,17 @@ public class Login extends JFrame implements ActionListener {
     }
 
     public void Intitial() {
+        BackgroundPanel bgPanel = new BackgroundPanel("./Image/image.png");
+        bgPanel.setLayout(null);
+        setContentPane(bgPanel);
         cp = this.getContentPane();
-        cp.setBackground(Color.WHITE);
-        cp.setLayout(null);
         p = new JPanel();
         p.setBackground(Color.WHITE);
         p.setLayout(null);
+
     }
 
-    public void setComponent(){
+    public void setComponent() {
         regis = new JLabel("Registration");
         regis.setBounds(0, 1, 300, 50);
         regis.setHorizontalAlignment(JLabel.CENTER);
@@ -40,29 +43,28 @@ public class Login extends JFrame implements ActionListener {
         user = new JLabel("USER");
         textuser = new JTextField();
         user.setBounds(50, 50, 50, 50);
-        textuser.setBounds(50,90, 200, 30);        
+        textuser.setBounds(50, 90, 200, 30);
         user.setFont(new Font("", Font.BOLD, 16));
-        
+
         pass = new JLabel("Password");
         textpass = new JPasswordField();
         pass.setBounds(50, 120, 100, 50);
-        textpass.setBounds(50,160, 200, 30);
+        textpass.setBounds(50, 160, 200, 30);
         pass.setFont(new Font("", Font.BOLD, 16));
         ImageIcon iconlogin = new ImageIcon("./Image/LoginIcon.png");
         Image scaled = iconlogin.getImage()
-        .getScaledInstance(120, 60, Image.SCALE_SMOOTH);
+                .getScaledInstance(120, 60, Image.SCALE_SMOOTH);
         login = new JButton(new ImageIcon(scaled));
         login.setBounds(100, 240, 100, 40);
 
         showpass = new JCheckBox();
         showpass.setBounds(46, 190, 20, 20);
         show = new JLabel("show password");
-        show.setBounds(70,190   , 100, 20);
+        show.setBounds(70, 190, 100, 20);
         show.setFont(new Font("", Font.BOLD, 9));
 
-
         warningLabel = new JLabel();
-        warningLabel.setBounds(50,120,190,160);
+        warningLabel.setBounds(50, 120, 190, 160);
         warningLabel.setFont(new Font("", Font.BOLD, 11));
 
         p.add(regis);
@@ -79,6 +81,7 @@ public class Login extends JFrame implements ActionListener {
         p.setBounds(95, 80, 300, 300);
         cp.add(p);
     }
+
     public void Finally() {
         this.setSize(500, 500);
         this.setLocationRelativeTo(null);
@@ -88,69 +91,73 @@ public class Login extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource()==showpass) {
+        if (e.getSource() == showpass) {
             if (showpass.isSelected()) {
-            textpass.setEchoChar((char)0);
-        }else textpass.setEchoChar('•');
+                textpass.setEchoChar((char) 0);
+            } else
+                textpass.setEchoChar('•');
         }
-        if (e.getSource()==login) {
+        if (e.getSource() == login) {
             login();
         }
     }
-    public String getusername(){
+
+    public String getusername() {
         return textuser.getText();
     }
-    public String getpassword(){
+
+    public String getpassword() {
         return new String(textpass.getPassword());
     }
-    public void login(){
+
+    public void login() {
         String user = getusername();
         String pass = getpassword();
-    if (user.isEmpty() || pass.isEmpty()) {
-        JOptionPane.showMessageDialog(this,"Username or Password isempty!!!");
-        return;
+        if (user.isEmpty() || pass.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Username or Password isempty!!!");
+            return;
+        }
+        if (checklogin(user, pass)) {
+            this.dispose();
+            new SelectionMenu(user);
+        } else if (checkloginAdmin(user, pass)) {
+            this.dispose();
+            new SelectionAdmin(user);
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid");
+        }
     }
-    if (checklogin(user,pass)) {
-        this.dispose();
-        new SelectionMenu(user);
-    }
-    else if (checkloginAdmin(user,pass)) {
-        this.dispose();
-        new SelectionAdmin(user);
-    }
-    else{
-        JOptionPane.showMessageDialog(this,"Invalid");
-     }
-    }
-      public boolean checklogin(String user, String pass){
-        try(BufferedReader br = new BufferedReader(new FileReader("./Lib/Nisit.csv"))){
+
+    public boolean checklogin(String user, String pass) {
+        try (BufferedReader br = new BufferedReader(new FileReader("./Lib/Nisit.csv"))) {
             br.readLine();
             String s;
             while ((s = br.readLine()) != null) {
                 String[] data = s.split(",");
 
-                if(data[0].equals(user) && data[2].equals(pass)) {
+                if (data[0].equals(user) && data[2].equals(pass)) {
                     return true;
                 }
             }
         } catch (Exception e1) {
-          e1.printStackTrace();
+            e1.printStackTrace();
         }
         return false;
     }
-    public boolean checkloginAdmin(String user,String pass){
-        try(BufferedReader br = new BufferedReader(new FileReader("./Lib/Admin.csv"))){
+
+    public boolean checkloginAdmin(String user, String pass) {
+        try (BufferedReader br = new BufferedReader(new FileReader("./Lib/Admin.csv"))) {
             br.readLine();
             String s;
-            while ((s = br.readLine())!=null) {
+            while ((s = br.readLine()) != null) {
                 String[] data = s.split(",");
-                if (data[0].equals(user)&&data[2].equals(pass)) {
+                if (data[0].equals(user) && data[2].equals(pass)) {
                     return true;
                 }
             }
         } catch (Exception e) {
-           
+
         }
         return false;
     }
-    }
+}
