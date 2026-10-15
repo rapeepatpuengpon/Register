@@ -2,22 +2,42 @@ import java.awt.event.*;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
-
+ 
+/**
+ * หน้าลงทะเบียนวิชา 
+ *
+ * ส่วนแสดงผล:
+ *   - Header: ชื่อหน้า, รหัสนิสิต, ชื่อ, ชั้นปี
+ *   - Body: รายการวิชาของ "ชั้นปีของนิสิต" เป็น JRadioButton ใน JScrollPane
+ *   - แสดงหน่วยกิตรวมปัจจุบัน และปุ่ม Add
+ *
+ * กฎมื่อกดปุ่ม Add:
+ *   1. ต้องเลือกวิชาก่อน ("Please choose subject")
+ *   2. ห้ามลงวิชาซ้ำ ("Subject Duplicate")
+ *   3. หน่วยกิตรวมห้ามเกิน 21 ("more than 21 credit")
+ *   ผ่านทั้งหมด -> บันทึกลง sub_regis.csv และแจ้ง "Add Complete"
+ *
+ * เมื่อปิดหน้าต่างจะเรียก menu.enableAddButton()
+ */
 public class Add extends JFrame implements ActionListener {
+ 
+    private Container cp;
+    private JPanel headPanel, bodyPanel, listPanel;
+    private JLabel regis, user, name , year, weight;
+    private JLabel currentweight;
+    private JLabel head;
+    private JRadioButton radio;
+    private ButtonGroup group;
+    private JScrollPane scrollPane;
+    private JComboBox<String> comboBox;
+    private JButton add;
+    private SelectionMenu menu;
+    private String currentuser;
 
-    Container cp;
-    JPanel headPanel, bodyPanel, listPanel;
-    JLabel regis, user, name , year, weight;
-    JLabel labelCode, labelSubject, currentweight;
-    JLabel head;
-    JRadioButton radio;
-    ButtonGroup group;
-    JScrollPane scrollPane;
-    JComboBox<String> comboBox;
-    JButton add;
-    SelectionMenu menu;
-    String currentuser;
-
+/**
+     * @param menu หน้าเมนูที่เรียกมา (เพื่อเปิดปุ่มกลับเมื่อปิด)
+     * @param user รหัสนิสิตที่ล็อกอินอยู่
+     */    
     public Add(SelectionMenu menu, String user) {
         this.menu = menu;
         this.currentuser = user;
@@ -26,57 +46,63 @@ public class Add extends JFrame implements ActionListener {
         setupFrame();
     }
 
-    public void Intitial() {
+ /** สร้าง panel หัว (BlueIcon), panel เนื้อหา (Background) และ panel รายการวิชา */
+    private void Intitial() {
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout());
         cp.setBackground(Color.WHITE);
-
-        headPanel = new JPanel();
+ 
+        headPanel = new BackgroundPanel("./Image/BlueIcon.png");
         headPanel.setLayout(new GridBagLayout());
         headPanel.setPreferredSize(new Dimension(1000, 200));
-        headPanel.setBackground(Color.white);
-
-        bodyPanel = new JPanel(new GridBagLayout());
-        bodyPanel.setBackground(Color.white);
-
+ 
+        bodyPanel = new BackgroundPanel("./Image/Background.jpg");
+        bodyPanel.setLayout(new GridBagLayout());
+       
         listPanel = new JPanel(new GridBagLayout());
+        listPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         listPanel.setBackground(Color.WHITE);
     }
 
-    public void setComponent() {
+/** สร้าง label ข้อมูลนิสิต, scrollPane, ปุ่ม Add และโหลดรายวิชาของชั้นปีนิสิต */
+    private void setComponent() {
         GridBagConstraints ghead = new GridBagConstraints();
         regis = new JLabel("Registration");
         regis.setFont(new Font("", Font.BOLD, 40));
+        regis.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 0;
         ghead.weightx = 1;
         ghead.anchor = GridBagConstraints.CENTER;
         headPanel.add(regis, ghead);
-
+ 
         user = new JLabel(getusername());
+        user.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 1;
         ghead.anchor = GridBagConstraints.WEST;
         user.setFont(new Font("", Font.BOLD, 25));
         ghead.insets = new Insets(15, 100, 0, 0);
         headPanel.add(user, ghead);
-
+ 
         name = new JLabel(getname(getusername()));
+        name.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 2;
         ghead.anchor = GridBagConstraints.WEST;
         name.setFont(new Font("", Font.BOLD, 25));
         ghead.insets = new Insets(10, 100, 0, 0);
         headPanel.add(name, ghead);
-
+ 
         year = new JLabel("Year :" + getyear(currentuser));
+        year.setForeground(Color.white);
         ghead.gridx = 0;
         ghead.gridy = 3;
         ghead.anchor = GridBagConstraints.WEST;
         year.setFont(new Font("", Font.BOLD, 25));
         ghead.insets = new Insets(10, 100, 0, 0);
         headPanel.add(year, ghead);
-
+ 
         GridBagConstraints gbody = new GridBagConstraints();
         scrollPane = new JScrollPane(listPanel);
         scrollPane.setPreferredSize(new Dimension(800, 400));
@@ -84,26 +110,33 @@ public class Add extends JFrame implements ActionListener {
         gbody.gridx = 0;
         gbody.gridy = 0;
         bodyPanel.add(scrollPane, gbody);
-
-        add = new JButton("Add");
+        
+        ImageIcon iconAdd = new ImageIcon("./Image/button_add.png");
+        Image scaled = iconAdd.getImage().getScaledInstance(150, 60, Image.SCALE_SMOOTH);
+        add = new JButton(new ImageIcon(scaled));
+        add.setPreferredSize(new Dimension(100,40));
         gbody.gridx = 0;
         gbody.gridy = 1;
         gbody.anchor = GridBagConstraints.EAST;
-        gbody.insets = new Insets(15, 0, 100, 0);
+        gbody.insets = new Insets(15, 0, 70, 0);
         bodyPanel.add(add, gbody);
-
+ 
+ 
+ 
         add.addActionListener(this);
-
+ 
         cp.add(bodyPanel, BorderLayout.CENTER);
         cp.add(headPanel, BorderLayout.NORTH);
-
+ 
         loadSubjects(getyear(currentuser));
     }
 
-    public void setupFrame() {
+ /** ตั้งขนาด ตำแหน่ง ตั้ง listener ตอนปิดหน้าต่าง และแสดงหน้าต่าง */
+    private void setupFrame() {
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        // ถ้าหน้าต่างอะไรที่มีให้กดหน้า SelectionMenu ถูกปิดจะให้กดปุ่มได้อีกครั้ง
         this.addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
                 menu.enableAddButton();
@@ -113,46 +146,54 @@ public class Add extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
-    @Override
+/**
+     * จัดการปุ่ม Add: ตรวจเงื่อนไขทั้ง 3 ข้อ (ดูที่คำอธิบายคลาส) แล้วบันทึกวิชา
+     * (ส่วนที่เช็ค comboBox ไม่ได้ใช้งานจริง เพราะไม่ได้สร้าง comboBox)
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == comboBox) {
             loadSubjects((String) comboBox.getSelectedItem());
         }
-
+ 
         if (e.getSource() == add) {
-
+ 
             if (group.getSelection() != null) {
                 String selectedData = group.getSelection().getActionCommand();
                 String[] data = selectedData.split("\\|");
-
+ 
                 String code = data[0];
                 String subject = data[1];
                 int weight = Integer.parseInt(data[2]);
-
+ 
                 if (checkduplicatesubject(currentuser, getsubject())) {
-                    JOptionPane.showMessageDialog(this,"Subject Duplicate");
+                  JOptionPane.showMessageDialog(this,"Subject Duplicate");
                     return;
                 }
-
+ 
                 int currentweight = countweight(getusername());
                 if(currentweight + weight > 21) {
-                    JOptionPane.showMessageDialog(this, "More than 21 credits");
+                  JOptionPane.showMessageDialog(this,"more than 21 credit");
                     return ;
                 }
-
+ 
                 savesubject(currentuser, code, subject, weight, getyear(currentuser));
-
+ 
                 loadSubjects(getyear(currentuser));
-
-                JOptionPane.showMessageDialog(this, "Add Complete");
+ 
+                JOptionPane.showMessageDialog(this,"Add Complete");
             } else {
-                JOptionPane.showMessageDialog(this, "Please Choose Subject");
+                JOptionPane.showMessageDialog(this,"Please choose subject");
             }
-
+ 
         }
     }
 
-    public int countweight(String user) {
+/**
+     * รวมหน่วยกิตทั้งหมดของ user จาก Lib/sub_regis.csv
+     * โครงสร้างไฟล์: user, code, subject, weight, year
+     * @return ผลรวมหน่วยกิต
+     */
+    private int countweight(String user) {
         int total = 0;
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
             String s;
@@ -169,12 +210,16 @@ public class Add extends JFrame implements ActionListener {
         return total;
     }
 
-    public boolean checkduplicatesubject(String user, String subject) {
+ /**
+     * ตรวจว่านิสิตลงวิชานี้ไปแล้วหรือไม่ (เทียบด้วยชื่อวิชา)
+     * @return true ถ้าซ้ำ
+     */
+    private boolean checkduplicatesubject(String user, String subject) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
             String s;
             while ((s = br.readLine()) != null) {
                 String data[] = s.split(",");
-
+ 
                 if (data[0].equals(user) && data[2].equals(subject)) {
                     return true;
                 }
@@ -185,36 +230,41 @@ public class Add extends JFrame implements ActionListener {
         return false;
     }
 
-    public void loadSubjects(String selectedYear) {
+/**
+     * โหลดวิชาจาก Lib/subject.csv เฉพาะปีที่กำหนด มาแสดงเป็น JRadioButton
+     * พร้อมแสดงหน่วยกิตรวมปัจจุบัน
+     * @param selectedYear ชั้นปีที่ต้องการแสดง
+     */
+    private void loadSubjects(String selectedYear) {
         listPanel.removeAll();
         group = new ButtonGroup();
-
+ 
         GridBagConstraints g = new GridBagConstraints();
         g.anchor = GridBagConstraints.WEST;
         int row = 0;
-
+ 
         head = new JLabel("Code | Subject | Weight");
         g.gridx = 0;
         g.gridy = 0;
         head.setFont(new Font("", Font.BOLD, 25));
         listPanel.add(head, g);
-
+ 
         weight = new JLabel("Weight");
         g.gridx = 1;
         g.gridy = 0;
         weight.setFont(new Font("", Font.BOLD, 20));
         g.insets = new Insets(0, 0, 0, 80);
         listPanel.add(weight, g);
-
+ 
         currentweight = new JLabel(countweight(getusername()) + "");
         g.gridx = 1;
         g.gridy = 1;
         currentweight.setFont(new Font("", Font.BOLD, 20));
         g.anchor = GridBagConstraints.CENTER;
         listPanel.add(currentweight, g);
-
+ 
         g.anchor = GridBagConstraints.WEST;
-
+ 
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/subject.csv"))) {
             br.readLine();
             String line;
@@ -224,9 +274,9 @@ public class Add extends JFrame implements ActionListener {
                     String code = d[0].trim();
                     String subject = d[1].trim();
                     String weight = d[2].trim();
-
+ 
                     g.gridy = row + 1;
-
+ 
                     g.gridx = 0;
                     g.weightx = 1;
                     radio = new JRadioButton(code + "|" + subject + "|" + weight);
@@ -235,9 +285,9 @@ public class Add extends JFrame implements ActionListener {
                     radio.setFont(new Font("", Font.PLAIN, 25));
                     group.add(radio);
                     listPanel.add(radio, g);
-
+ 
                     row++;
-
+ 
                 }
             }
             g.gridx = 0;
@@ -247,12 +297,20 @@ public class Add extends JFrame implements ActionListener {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+ 
         listPanel.revalidate();
         listPanel.repaint();
     }
 
-    public void savesubject(String user, String code, String subject, int weight, String year) {
+/**
+ * ฟังก์ชันเพิ่มข้อมูลจากการลงทะเบียนจะเขียนลงในไฟล์ sub_regis.csv
+ * @param user รหัสและชื่อนิสิตที่ลงทะเบียน
+ * @param code รหัสวิชาที่ลงทะเบียน
+ * @param subject ชื่อวิชาที่ลงทะเบียน
+ * @param weight จำนวนหน่วยกิตของวิชา
+ * @param year ชั้นปีของวิชาที่ลงทะเบียน
+ */
+    private void savesubject(String user, String code, String subject, int weight, String year) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("Lib/sub_regis.csv", true))) {
             bw.write(user + "," + code + "," + subject + "," + weight + "," + year);
             bw.newLine();
@@ -261,21 +319,30 @@ public class Add extends JFrame implements ActionListener {
         }
     }
 
-    public String getusername() {
+/**
+ * ฟังก์ส่งค่านิสิต
+ * @return คืนค่านิสิตคนปัจจุบัน
+ */
+    private String getusername() {
         return currentuser;
     }
 
-    public String getname(String user) {
+/**
+ * ฟังก์ชั่นค้นหานิสิตในไฟล์ Nisit.csv
+ * @param user รหัสของนิสิต
+ * @return ชื่อนิสิตจาก Lib/Nisit.csv (คืน "" ถ้าไม่พบ) 
+ */
+    private String getname(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();
             String s;
             while ((s = br.readLine()) != null) {
                 String data[] = s.split(",");
-
+ 
                 if (data[0].equals(user)) {
                     return data[1];
                 }
-
+ 
             }
         } catch (Exception e2) {
             e2.printStackTrace();
@@ -283,7 +350,8 @@ public class Add extends JFrame implements ActionListener {
         return "";
     }
 
-    public String getsubject() {
+/** @return ชื่อวิชาของ radio ที่เลือก (คืน null ถ้ายังไม่ได้เลือก) */
+    private String getsubject() {
         if (group.getSelection() != null) {
             String selectedData = group.getSelection().getActionCommand();
             String[] data = selectedData.split("\\|");
@@ -291,24 +359,25 @@ public class Add extends JFrame implements ActionListener {
         }
         return null;
     }
-
-    public String getyear(String user) {
+ 
+/** @return ชั้นปีของนิสิตจาก Lib/Nisit.csv (คืน "" ถ้าไม่พบ) */
+    private String getyear(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();
             String s;
             while ((s = br.readLine()) != null) {
                 String data[] = s.split(",");
-
+ 
                 if (data[0].equals(user)) {
                     return data[3];
                 }
-
+ 
             }
         } catch (Exception e1) {
             e1.printStackTrace();
         }
         return "";
     }
-
+ 
     
 }
