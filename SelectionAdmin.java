@@ -1,17 +1,27 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
- 
+/**
+ * เมนูหลักของแอดมิน 
+ * ปุ่ม: add    -> เปิด AddAdmin (เพิ่มวิชาเข้าระบบ)
+ *     drop   -> เปิด RemoveSubjectAdmin (ลบวิชาออกจากระบบ)
+ *     logout -> ยืนยันแล้วกลับหน้า Login
+ * เมื่อเปิดหน้าลูกจะ disable ปุ่มทั้งหมด และเปิดกลับด้วย enableAddButton()
+ */ 
 public class SelectionAdmin extends JFrame implements ActionListener{
     private Container cp;
     private JPanel panel;
     private JLabel selection;
     private JButton add,drop,logout;
+
+/** สร้างเมนูแอดมิน (ไม่รับ parameter) */    
     public SelectionAdmin(){
         Intitial();
         setComponent();
         setupFrame();
     }
+
+/** สร้าง panel พื้นหลังของเมนู */    
     private void Intitial(){
         cp = this.getContentPane();
         
@@ -20,6 +30,8 @@ public class SelectionAdmin extends JFrame implements ActionListener{
  
         
     }
+
+/** สร้างและวางปุ่มทั้งหมดพร้อมผูก ActionListener */    
     private void setComponent(){
         selection = new JLabel("Select");
         selection.setBounds(250, 30, 300, 50);
@@ -53,6 +65,8 @@ public class SelectionAdmin extends JFrame implements ActionListener{
         cp.add(panel);
  
     }
+
+/** ตั้งขนาด ตำแหน่ง และแสดงหน้าต่าง */    
     private void setupFrame(){
         this.setSize(600, 250);
         this.setLocationRelativeTo(null);
@@ -60,6 +74,8 @@ public class SelectionAdmin extends JFrame implements ActionListener{
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
+/** จัดการปุ่ม logout / add / drop (ดูที่คำอธิบายคลาส) */    
     public void actionPerformed(ActionEvent e) { 
          if (e.getSource() == logout) {
             int confirm = JOptionPane.showConfirmDialog(this, "Do you want to logout?", "Confirm Logout",JOptionPane.YES_NO_OPTION);
@@ -81,6 +97,8 @@ public class SelectionAdmin extends JFrame implements ActionListener{
             new RemoveSubjectAdmin(this);
         }
     }
+
+/** เปิดปุ่มทุกปุ่มกลับ (ถูกเรียกเมื่อหน้าลูกปิด) */    
     public void enableAddButton() {
         add.setEnabled(true);
         drop.setEnabled(true);

@@ -4,7 +4,20 @@ import java.io.*;
 import java.util.ArrayList;
  
 import javax.swing.*;
- 
+
+/**
+ * หน้าถอนวิชาของนิสิต 
+ *
+ * ส่วนแสดงผล: Header ข้อมูลนิสิต, รายวิชาที่ลงไว้เป็น JRadioButton, หน่วยกิตรวม, ปุ่ม Remove
+ *
+ * กฎเมื่อกดปุ่ม Remove:
+ *   1. ต้องเลือกวิชาก่อน ("Please select subject")
+ *   2. ต้องเหลืออย่างน้อย 1 วิชา (ถ้ามี <= 1 วิชาจะถอนไม่ได้)
+ *   ผ่าน -> อ่าน sub_regis.csv ทั้งหมดเก็บใน list ยกเว้นบรรทัดที่ตรงกับ (user + code)
+ *           แล้วเขียนไฟล์ทับ และแจ้ง "Success"
+ *
+ * เมื่อปิดหน้าต่างจะเรียก menu.enableAddButton()
+ */
 public class Repeal extends JFrame implements ActionListener {
     private Container cp;
     private JPanel headpanel, centerpanel, removepanel;
@@ -14,7 +27,11 @@ public class Repeal extends JFrame implements ActionListener {
     private JScrollPane scrollpane;
     private SelectionMenu menu;
     private String currentuser;
- 
+
+/**
+     * @param menu หน้าเมนูที่เรียกมา
+     * @param user รหัสนิสิตที่ล็อกอินอยู่
+     */
     public Repeal(SelectionMenu menu, String user) {
         this.menu = menu;
         this.currentuser = user;
@@ -22,7 +39,8 @@ public class Repeal extends JFrame implements ActionListener {
         setComponent();
         setupFrame();
     }
- 
+
+/** สร้าง panel หัว, panel กลาง และ panel รายการวิชาที่ลง */
     private void Intitial() {
         cp = this.getContentPane();
         cp.setBackground(Color.WHITE);
@@ -44,6 +62,7 @@ public class Repeal extends JFrame implements ActionListener {
         removepanel.setBackground(Color.WHITE);
     }
  
+/** สร้าง label ข้อมูลนิสิต, scrollPane, ปุ่ม Remove และโหลดรายวิชา */  
     private void setComponent() {
  
         GridBagConstraints ghead = new GridBagConstraints();
@@ -105,7 +124,8 @@ public class Repeal extends JFrame implements ActionListener {
  
         loadSubjects(currentuser);
     }
- 
+
+/** ตั้งขนาด ตำแหน่ง ตั้ง listener ตอนปิดหน้าต่าง และแสดงหน้าต่าง */
     private void setupFrame() {
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
@@ -119,6 +139,11 @@ public class Repeal extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
  
+/**
+     * แสดงวิชาที่ user ลงไว้จาก Lib/sub_regis.csv เป็น JRadioButton
+     * (actionCommand = รหัสวิชา) พร้อมหน่วยกิตรวม
+     * @param user รหัสนิสิต
+     */    
     private void loadSubjects(String user) {
         removepanel.removeAll();
         group = new ButtonGroup();
@@ -182,11 +207,13 @@ public class Repeal extends JFrame implements ActionListener {
         removepanel.revalidate();
         removepanel.repaint();
     }
- 
+
+/** @return รหัสนิสิตปัจจุบัน */    
     private String getusername() {
         return currentuser;
     }
- 
+
+/** @return ชื่อนิสิตจาก Lib/Nisit.csv (คืน "" ถ้าไม่พบ) */
     private String getname(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();
@@ -204,6 +231,8 @@ public class Repeal extends JFrame implements ActionListener {
         }
         return "";
     }
+
+/** @return ผลรวมหน่วยกิตของ user จาก Lib/sub_regis.csv */
     private int countweight(String user) {
         int total = 0;
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
@@ -221,6 +250,7 @@ public class Repeal extends JFrame implements ActionListener {
         return total;
     }
  
+/** @return ชั้นปีของ user (อ่านจาก Lib/sub_regis.csv คอลัมน์ที่ 5) */    
     private String getyear(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
             String s;
@@ -237,6 +267,8 @@ public class Repeal extends JFrame implements ActionListener {
         }
         return "";
     }
+
+/** @return จำนวนวิชาที่ user ลงทะเบียนอยู่ใน Lib/sub_regis.csv */ 
     private int countsubject(String user) {
         int count = 0;
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
@@ -253,6 +285,11 @@ public class Repeal extends JFrame implements ActionListener {
         }
         return count;
     }
+
+/**
+     * จัดการปุ่ม Remove: ตรวจเงื่อนไข 2 ข้อ (ดูที่คำอธิบายคลาส)
+     * แล้วลบวิชาที่เลือกออกจาก Lib/sub_regis.csv และโหลดรายการใหม่
+     */  
     public void actionPerformed(ActionEvent e2) {
         if (group == null || group.getSelection() == null) {
             JOptionPane.showMessageDialog(this, "Please select subject");

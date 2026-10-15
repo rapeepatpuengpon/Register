@@ -3,7 +3,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import javax.swing.*;
 import java.awt.*;
- 
+/**
+ * หน้าดูรายวิชาที่ลงทะเบียนแล้ว
+ *
+ * แสดง: Header ข้อมูลนิสิต, ตารางรหัสวิชา/ชื่อวิชา/หน่วยกิต และ "Total Weight"
+ * เมื่อปิดหน้าต่างจะเรียก menu.enableAddButton()
+ */ 
 public class MyList extends JFrame {
  
     private Container cp;
@@ -12,6 +17,10 @@ public class MyList extends JFrame {
     private String user;
     private SelectionMenu menu;
  
+/**
+     * @param menu หน้าเมนูที่เรียกมา
+     * @param user รหัสนิสิตที่ล็อกอินอยู่
+     */    
     public MyList(SelectionMenu menu, String user) {
         this.menu = menu;
         this.user = user;
@@ -20,6 +29,7 @@ public class MyList extends JFrame {
         setupFrame();
     }
  
+/** สร้าง panel หัว, panel พื้นหลัง และ panel รายการวิชา */
     private void Intitial() {
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout());
@@ -36,6 +46,8 @@ public class MyList extends JFrame {
         panelbody.setBackground(Color.WHITE);
  
     }
+
+/** สร้าง label ข้อมูลนิสิต, scrollPane, Total Weight และโหลดรายวิชา */    
     private void setComponent() {
  
         GridBagConstraints ghead = new GridBagConstraints();
@@ -99,7 +111,8 @@ public class MyList extends JFrame {
         cp.add(panelhead, BorderLayout.NORTH);
         cp.add(wrappanel, BorderLayout.CENTER);
     }
- 
+
+/** ตั้งขนาด ตำแหน่ง ตั้ง listener ตอนปิดหน้าต่าง และแสดงหน้าต่าง */    
     private void setupFrame() {
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
@@ -112,11 +125,13 @@ public class MyList extends JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
- 
+
+/** @return รหัสนิสิตปัจจุบัน */ 
     private String getusername() {
         return user;
     }
- 
+
+/** @return ชื่อนิสิตจาก Lib/Nisit.csv (คืน "" ถ้าไม่พบ) */    
     private String getname(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();
@@ -134,7 +149,8 @@ public class MyList extends JFrame {
         }
         return "";
     }
- 
+
+/** @return ชั้นปีของ user (อ่านจาก Lib/sub_regis.csv คอลัมน์ที่ 5) */    
     private String getyear(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
             String s;
@@ -151,7 +167,11 @@ public class MyList extends JFrame {
         }
         return "";
     }
- 
+
+/**
+     * แสดงวิชาที่ user ลงไว้จาก Lib/sub_regis.csv เป็น label (รหัส, ชื่อวิชา, หน่วยกิต)
+     * @param user รหัสนิสิต
+     */    
     private void writesubject(String user) {
         GridBagConstraints glabel = new GridBagConstraints();
         glabel.anchor = GridBagConstraints.WEST;
@@ -202,6 +222,7 @@ public class MyList extends JFrame {
  
     }
  
+/** @return ผลรวมหน่วยกิตของ user จาก Lib/sub_regis.csv */    
     private int calweight(String user) {
         int total = 0;
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))){

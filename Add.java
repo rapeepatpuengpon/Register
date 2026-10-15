@@ -3,6 +3,22 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
  
+/**
+ * หน้าลงทะเบียนวิชา 
+ *
+ * ส่วนแสดงผล:
+ *   - Header: ชื่อหน้า, รหัสนิสิต, ชื่อ, ชั้นปี
+ *   - Body: รายการวิชาของ "ชั้นปีของนิสิต" เป็น JRadioButton ใน JScrollPane
+ *   - แสดงหน่วยกิตรวมปัจจุบัน และปุ่ม Add
+ *
+ * กฎมื่อกดปุ่ม Add:
+ *   1. ต้องเลือกวิชาก่อน ("Please choose subject")
+ *   2. ห้ามลงวิชาซ้ำ ("Subject Duplicate")
+ *   3. หน่วยกิตรวมห้ามเกิน 21 ("more than 21 credit")
+ *   ผ่านทั้งหมด -> บันทึกลง sub_regis.csv และแจ้ง "Add Complete"
+ *
+ * เมื่อปิดหน้าต่างจะเรียก menu.enableAddButton()
+ */
 public class Add extends JFrame implements ActionListener {
  
     private Container cp;
@@ -17,7 +33,11 @@ public class Add extends JFrame implements ActionListener {
     private JButton add;
     private SelectionMenu menu;
     private String currentuser;
- 
+
+/**
+     * @param menu หน้าเมนูที่เรียกมา (เพื่อเปิดปุ่มกลับเมื่อปิด)
+     * @param user รหัสนิสิตที่ล็อกอินอยู่
+     */    
     public Add(SelectionMenu menu, String user) {
         this.menu = menu;
         this.currentuser = user;
@@ -25,7 +45,8 @@ public class Add extends JFrame implements ActionListener {
         setComponent();
         setupFrame();
     }
- 
+
+ /** สร้าง panel หัว (BlueIcon), panel เนื้อหา (Background) และ panel รายการวิชา */
     private void Intitial() {
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout());
@@ -42,7 +63,8 @@ public class Add extends JFrame implements ActionListener {
         listPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         listPanel.setBackground(Color.WHITE);
     }
- 
+
+/** สร้าง label ข้อมูลนิสิต, scrollPane, ปุ่ม Add และโหลดรายวิชาของชั้นปีนิสิต */
     private void setComponent() {
         GridBagConstraints ghead = new GridBagConstraints();
         regis = new JLabel("Registration");
@@ -108,11 +130,13 @@ public class Add extends JFrame implements ActionListener {
  
         loadSubjects(getyear(currentuser));
     }
- 
+
+ /** ตั้งขนาด ตำแหน่ง ตั้ง listener ตอนปิดหน้าต่าง และแสดงหน้าต่าง */
     private void setupFrame() {
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        // ถ้าหน้าต่างอะไรที่มีให้กดหน้า SelectionMenu ถูกปิดจะให้กดปุ่มได้อีกครั้ง
         this.addWindowListener(new WindowAdapter() {
             public void windowClosed(WindowEvent e) {
                 menu.enableAddButton();
@@ -121,8 +145,11 @@ public class Add extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
- 
-    @Override
+
+/**
+     * จัดการปุ่ม Add: ตรวจเงื่อนไขทั้ง 3 ข้อ (ดูที่คำอธิบายคลาส) แล้วบันทึกวิชา
+     * (ส่วนที่เช็ค comboBox ไม่ได้ใช้งานจริง เพราะไม่ได้สร้าง comboBox)
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == comboBox) {
             loadSubjects((String) comboBox.getSelectedItem());
@@ -160,7 +187,12 @@ public class Add extends JFrame implements ActionListener {
  
         }
     }
- 
+
+/**
+     * รวมหน่วยกิตทั้งหมดของ user จาก Lib/sub_regis.csv
+     * โครงสร้างไฟล์: user, code, subject, weight, year
+     * @return ผลรวมหน่วยกิต
+     */
     private int countweight(String user) {
         int total = 0;
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
@@ -177,7 +209,11 @@ public class Add extends JFrame implements ActionListener {
         }
         return total;
     }
- 
+
+ /**
+     * ตรวจว่านิสิตลงวิชานี้ไปแล้วหรือไม่ (เทียบด้วยชื่อวิชา)
+     * @return true ถ้าซ้ำ
+     */
     private boolean checkduplicatesubject(String user, String subject) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
             String s;
@@ -193,7 +229,12 @@ public class Add extends JFrame implements ActionListener {
         }
         return false;
     }
- 
+
+/**
+     * โหลดวิชาจาก Lib/subject.csv เฉพาะปีที่กำหนด มาแสดงเป็น JRadioButton
+     * พร้อมแสดงหน่วยกิตรวมปัจจุบัน
+     * @param selectedYear ชั้นปีที่ต้องการแสดง
+     */
     private void loadSubjects(String selectedYear) {
         listPanel.removeAll();
         group = new ButtonGroup();
@@ -260,6 +301,15 @@ public class Add extends JFrame implements ActionListener {
         listPanel.revalidate();
         listPanel.repaint();
     }
+
+/**
+ * ฟังก์ชันเพิ่มข้อมูลจากการลงทะเบียนจะเขียนลงในไฟล์ sub_regis.csv
+ * @param user รหัสและชื่อนิสิตที่ลงทะเบียน
+ * @param code รหัสวิชาที่ลงทะเบียน
+ * @param subject ชื่อวิชาที่ลงทะเบียน
+ * @param weight จำนวนหน่วยกิตของวิชา
+ * @param year ชั้นปีของวิชาที่ลงทะเบียน
+ */
     private void savesubject(String user, String code, String subject, int weight, String year) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("Lib/sub_regis.csv", true))) {
             bw.write(user + "," + code + "," + subject + "," + weight + "," + year);
@@ -268,9 +318,20 @@ public class Add extends JFrame implements ActionListener {
             e3.printStackTrace();
         }
     }
+
+/**
+ * ฟังก์ส่งค่านิสิต
+ * @return คืนค่านิสิตคนปัจจุบัน
+ */
     private String getusername() {
         return currentuser;
     }
+
+/**
+ * ฟังก์ชั่นค้นหานิสิตในไฟล์ Nisit.csv
+ * @param user รหัสของนิสิต
+ * @return ชื่อนิสิตจาก Lib/Nisit.csv (คืน "" ถ้าไม่พบ) 
+ */
     private String getname(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();
@@ -288,7 +349,8 @@ public class Add extends JFrame implements ActionListener {
         }
         return "";
     }
- 
+
+/** @return ชื่อวิชาของ radio ที่เลือก (คืน null ถ้ายังไม่ได้เลือก) */
     private String getsubject() {
         if (group.getSelection() != null) {
             String selectedData = group.getSelection().getActionCommand();
@@ -298,6 +360,7 @@ public class Add extends JFrame implements ActionListener {
         return null;
     }
  
+/** @return ชั้นปีของนิสิตจาก Lib/Nisit.csv (คืน "" ถ้าไม่พบ) */
     private String getyear(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();

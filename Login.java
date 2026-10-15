@@ -5,7 +5,19 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
- 
+/**
+ * Login extends JFrame implements ActionListener - หน้าเข้าสู่ระบบ (500x500, layout แบบ null)
+ *
+ * Components: textuser (ช่อง user), textpass (ช่องรหัสผ่าน),
+ *             showpass (checkbox แสดงรหัสผ่าน), login (ปุ่มเข้าสู่ระบบ)
+ *
+ * Flow:
+ *   - ช่องใดช่องหนึ่งว่าง -> แจ้งเตือน
+ *   - ตรงกับ Nisit.csv  -> dispose แล้วเปิด SelectionMenu(user)
+ *   - ตรงกับ Admin.csv  -> dispose แล้วเปิด SelectionAdmin()
+ *   - ไม่ตรงทั้งสองไฟล์ -> แสดง "Invalid"
+ * ปิดหน้าต่าง = ออกจากโปรแกรม (EXIT_ON_CLOSE)
+ */ 
 public class Login extends JFrame implements ActionListener {
  
     private Container cp;
@@ -18,13 +30,15 @@ public class Login extends JFrame implements ActionListener {
     private JCheckBox showpass;
     private JButton login;
     private JLabel warningLabel;
- 
+
+/** สร้างหน้า Login: Intitial -> setComponent -> Finally */
     public Login() {
         Intitial();
         setComponent();
         Finally();
     }
- 
+
+ /** สร้างพื้นหลัง (BackgroundPanel) และ panel กลางสีขาวโปร่งแสง */
     private void Intitial() {
         BackgroundPanel bgPanel = new BackgroundPanel("./Image/images.jpg");
         bgPanel.setLayout(null);
@@ -36,7 +50,8 @@ public class Login extends JFrame implements ActionListener {
         p.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         p.setLayout(null);
     }
- 
+
+/** สร้างและวาง label, ช่องกรอก, checkbox, ปุ่ม Login พร้อมผูก ActionListener */
     private void setComponent() {
         regis = new JLabel("Registration");
         regis.setBounds(0, 1, 300, 50);
@@ -85,7 +100,8 @@ public class Login extends JFrame implements ActionListener {
         p.setBounds(95, 80, 300, 300);
         cp.add(p);
     }
- 
+
+/** ตั้งขนาด ตำแหน่ง และแสดงหน้าต่าง (ปิด = ออกโปรแกรม) */
     private void Finally() {
         this.setSize(500, 500);
         this.setLocationRelativeTo(null);
@@ -93,7 +109,12 @@ public class Login extends JFrame implements ActionListener {
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
- 
+
+ /**
+* จัดการ event:
+*  - showpass: สลับการแสดง/ซ่อนรหัสผ่าน (echo char)
+*  - login: เรียก login()
+*/
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == showpass) {
             if (showpass.isSelected()) {
@@ -105,15 +126,18 @@ public class Login extends JFrame implements ActionListener {
             login();
         }
     }
- 
+
+/** @return ข้อความในช่อง user */
     private String getusername() {
         return textuser.getText();
     }
- 
+
+/** @return รหัสผ่านในช่อง password เป็น String */
     private String getpassword() {
         return new String(textpass.getPassword());
     }
- 
+
+/** ตรวจช่องว่าง แล้วเช็คนิสิตก่อน ถ้าไม่ใช่เช็คแอดมิน และเปิดหน้าที่เกี่ยวข้อง */    
     private void login() {
         String user = getusername().trim();
         String pass = getpassword().trim();
@@ -131,7 +155,12 @@ public class Login extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Invalid");
         }
     }
- 
+
+/**
+* ตรวจสอบ user/password นิสิตจาก Lib/Nisit.csv (ข้าม header)
+* เทียบ data[0] = user และ data[2] = password
+* @return true ถ้าตรงกัน
+*/
     private boolean checklogin(String user, String pass) {
         try (BufferedReader br = new BufferedReader(new FileReader("./Lib/Nisit.csv"))) {
             br.readLine();
@@ -148,7 +177,12 @@ public class Login extends JFrame implements ActionListener {
         }
         return false;
     }
- 
+    
+/**
+* ตรวจสอบ user/password แอดมินจาก Lib/Admin.csv (ข้าม header)
+* เทียบ data[0] = user และ data[2] = password
+* @return true ถ้าตรงกัน
+*/ 
     private boolean checkloginAdmin(String user, String pass) {
         try (BufferedReader br = new BufferedReader(new FileReader("./Lib/Admin.csv"))) {
             br.readLine();

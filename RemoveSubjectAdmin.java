@@ -4,7 +4,18 @@ import java.io.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
-
+/**
+ * แอดมินลบวิชาออกจากระบบ 
+ *
+ * ส่วนแสดงผล: ComboBox เลือกปี (1-4), รายวิชาของปีนั้นเป็น JRadioButton, ปุ่ม Remove
+ *
+ * การทำงาน:
+ *   - เปลี่ยนปีใน ComboBox -> โหลดรายการวิชาของปีนั้นใหม่
+ *   - กด Remove: ต้องเลือกวิชาก่อน ("Please select subject")
+ *     จากนั้นอ่าน subject.csv กรองบรรทัดที่ code ตรงกันออก แล้วเขียนทับและแจ้ง "Remove Success"
+ *
+ * เมื่อปิดหน้าต่างจะเรียก menu.enableAddButton()
+ */
 public class RemoveSubjectAdmin extends JFrame implements ActionListener {
     private Container cp;
     private JPanel headpanel, centerpanel, removepanel;
@@ -14,7 +25,8 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener {
     private JScrollPane scrollpane;
     private JComboBox<String> comboBox;
     private SelectionAdmin menu;
-
+  
+/** @param menu หน้าเมนูแอดมินที่เรียกมา */
     public RemoveSubjectAdmin(SelectionAdmin menu) {
         this.menu = menu;
         Intitial();
@@ -22,6 +34,7 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener {
         setupFrame();
     }
 
+/** สร้าง panel หัว, panel กลาง และ panel รายการวิชา */
     private void Intitial() {
         cp = this.getContentPane();
         cp.setBackground(Color.WHITE);
@@ -41,6 +54,7 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener {
         removepanel.setBackground(Color.WHITE);
     }
 
+/** สร้าง ComboBox ปี, scrollPane, ปุ่ม Remove และโหลดวิชาของปีที่เลือก */
     private void setComponent() {
         GridBagConstraints ghead = new GridBagConstraints();
         repeal = new JLabel("Repeal");
@@ -88,6 +102,7 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener {
         loadSubjects((String) comboBox.getSelectedItem());
     }
 
+/** ตั้งขนาด ตำแหน่ง ตั้ง listener ตอนปิดหน้าต่าง และแสดงหน้าต่าง */    
     private void setupFrame() {
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
@@ -101,6 +116,10 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
+ /**
+     * แสดงวิชาของปีที่เลือกจาก Lib/subject.csv เป็น JRadioButton (actionCommand = รหัสวิชา)
+     * @param selectedYear ชั้นปีที่ต้องการแสดง
+     */    
     private void loadSubjects(String selectedYear) {
         removepanel.removeAll();
         group = new ButtonGroup();
@@ -138,6 +157,12 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener {
         removepanel.repaint();
     }
 
+/**
+     * นับจำนวนนิสิตที่ลงทะเบียนวิชาหนึ่ง ๆ (ใช้ป้องกันการลบวิชาที่ยังมีคนลงอยู่)
+     * อ่าน ./Lib/sub_regis.csv แล้วนับบรรทัดที่ data[1] (รหัสวิชา) ตรงกับ code
+     * @param code รหัสวิชาที่ต้องการนับ
+     * @return จำนวนที่ลงทะเบียนวิชานี้ไว้ (0 ถ้าไม่มี)
+     */    
     private int countRegistered(String code) {
         int count = 0;
         try (BufferedReader br = new BufferedReader(new FileReader("./Lib/sub_regis.csv"))) {
@@ -154,6 +179,11 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener {
         return count;
     }
 
+/**
+     * จัดการ event:
+     *  - comboBox: โหลดรายการวิชาของปีที่เลือกใหม่
+     *  - removebutton: ลบวิชาที่เลือกออกจาก Lib/subject.csv
+     */
     public void actionPerformed(ActionEvent e2) {
         if (e2.getSource() == comboBox) {
             loadSubjects((String) comboBox.getSelectedItem());

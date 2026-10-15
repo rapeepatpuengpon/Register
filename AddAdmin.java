@@ -2,7 +2,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
- 
+/**
+ * AddAdmin extends JFrame implements ActionListener - แอดมินเพิ่มวิชาใหม่ลงระบบ (1000x800)
+ *
+ * ส่วนแสดงผล:
+ *   - ซ้าย: ComboBox เลือกปี (1-4) และรายการวิชาของปีนั้น
+ *   - ขวา: ฟอร์มกรอก Code, Subject, Weight, Year พร้อม label แจ้งเตือนแต่ละช่อง
+ *
+ * Validation เมื่อกดปุ่ม Add:
+ *   - code, subject, weight, year ห้ามว่าง
+ *   - code และ subject ห้ามซ้ำกับที่มีใน subject.csv
+ *   ผ่าน -> append ลง subject.csv, สลับไปแสดงปีนั้น และล้างฟอร์ม
+ *
+ * เมื่อปิดหน้าต่างจะเรียก menu.enableAddButton()
+ */ 
 public class AddAdmin extends JFrame implements ActionListener {
  
     private Container cp;
@@ -13,14 +26,16 @@ public class AddAdmin extends JFrame implements ActionListener {
     private JTextField codetext, subjecttext, weighttext, yeartext;
     private JButton addsubject;
     private SelectionAdmin menu;
- 
+
+/** @param menu หน้าเมนูแอดมินที่เรียกมา */    
     public AddAdmin(SelectionAdmin menu) {
         this.menu = menu;
         Intitial();
         setComponent();
         setupFrame();
     }
- 
+
+/** สร้าง panel หัว, panel พื้นหลัง, panel รายการวิชา และ panel ฟอร์มเพิ่มวิชา */    
     private void Intitial() {
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout());
@@ -43,7 +58,8 @@ public class AddAdmin extends JFrame implements ActionListener {
         paneladd.setPreferredSize(new Dimension(250, 350));
  
     }
- 
+
+/** สร้าง ComboBox ปี, scrollPane, ปุ่ม Add, ฟอร์มกรอกข้อมูล และโหลดวิชาปี 1 */    
     private void setComponent() {
  
         GridBagConstraints ghead = new GridBagConstraints();
@@ -180,7 +196,8 @@ public class AddAdmin extends JFrame implements ActionListener {
  
         writesubject("1");
     }
- 
+
+/** ตั้งขนาด ตำแหน่ง ตั้ง listener ตอนปิดหน้าต่าง และแสดงหน้าต่าง */    
     private void setupFrame() {
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
@@ -194,7 +211,11 @@ public class AddAdmin extends JFrame implements ActionListener {
         this.setVisible(true);
     }
  
-    @Override
+/**
+     * จัดการ event:
+     *  - boxyear: โหลดรายการวิชาของปีที่เลือก
+     *  - addsubject: ตรวจ validation แล้วบันทึกวิชาใหม่
+     */    
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == boxyear) {
             String selectedYear = (String) boxyear.getSelectedItem();
@@ -261,30 +282,36 @@ public class AddAdmin extends JFrame implements ActionListener {
             clearWarnings();
         }
     }
- 
+
+ /** ล้างข้อความแจ้งเตือนทุกช่อง */    
     private void clearWarnings() {
         warningcode.setText(" ");
         warningsubject.setText(" ");
         warningweight.setText(" ");
         warningyear.setText(" ");
     }
- 
+
+/** แสดงข้อความแจ้งเตือนใต้ช่อง Code */    
     private void showWarningcode(String msg) {
         warningcode.setText(msg);
     }
  
+/** แสดงข้อความแจ้งเตือนใต้ช่อง Subject */    
     private void showWarningsubject(String msg) {
         warningsubject.setText(msg);
     }
  
+/** แสดงข้อความแจ้งเตือนใต้ช่อง Weight */    
     private void showWarningweight(String msg) {
         warningweight.setText(msg);
     }
  
+/** แสดงข้อความแจ้งเตือนใต้ช่อง Year */    
     private void showWarningyear(String msg) {
         warningyear.setText(msg);
     }
- 
+
+/** @return true ถ้ารหัสวิชานี้มีอยู่แล้วใน Lib/subject.csv */    
     private boolean checkduplicatecode(String code) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/subject.csv"))) {
             br.readLine();
@@ -301,7 +328,8 @@ public class AddAdmin extends JFrame implements ActionListener {
         }
         return false;
     }
- 
+
+/** @return true ถ้าชื่อวิชานี้มีอยู่แล้วใน Lib/subject.csv */
     private boolean checkduplicatesubject(String subject) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/subject.csv"))) {
             br.readLine();
@@ -318,7 +346,11 @@ public class AddAdmin extends JFrame implements ActionListener {
         }
         return false;
     }
- 
+
+ /**
+     * แสดงวิชาของปีที่เลือกจาก Lib/subject.csv เป็น label (รหัส, ชื่อ, หน่วยกิต)
+     * @param year ชั้นปีที่ต้องการแสดง
+     */   
     private void writesubject(String year) {
  
         panelbody.removeAll();

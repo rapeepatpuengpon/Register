@@ -2,73 +2,92 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
- 
+
 import javax.swing.*;
- 
+
+/**
+ * เมนูหลักของนิสิต
+ *
+ * ปุ่ม: add (Registration) -> เปิด Add
+ * drop (Repeal) -> เปิด Repeal (ต้องมีวิชาที่ลงไว้แล้ว)
+ * mysubject (My List)-> เปิด MyList
+ * ศogout -> ยืนยันแล้วกลับหน้า Login
+ *
+ * ตรวจจับ: เมื่อเปิดหน้าลูกจะ disable ปุ่มทุกปุ่ม
+ * และเปิดกลับด้วย enableAddButton() เมื่อหน้าลูกถูกปิด
+ */
 public class SelectionMenu extends JFrame implements ActionListener {
     private Container cp;
     private JPanel panel;
     private JLabel selection;
     private JButton add, mysubject, drop, logout;
     private String currentuser;
- 
+
+    /**
+     * @param user รหัสนิสิตที่ล็อกอินอยู่ (เก็บไว้ใน currentuser)
+     */
     public SelectionMenu(String user) {
         this.currentuser = user;
         Intitial();
         setComponent();
         setupFrame();
     }
- 
+
+    /** สร้าง panel พื้นหลังของเมนู */
     private void Intitial() {
         cp = this.getContentPane();
- 
+
         panel = new BackgroundPanel("./Image/BackgroundSelection3.png");
         panel.setLayout(null);
     }
+
+    /** สร้างและวางปุ่มทั้งหมดพร้อมผูก ActionListener */
     private void setComponent() {
         selection = new JLabel("Select");
-        selection.setBounds(250, 30, 300, 50);selection.setForeground(Color.BLACK);
+        selection.setBounds(250, 30, 300, 50);
+        selection.setForeground(Color.BLACK);
         selection.setFont(new Font("", Font.BOLD, 30));
         panel.add(selection);
-        
+
         ImageIcon iconRegis = new ImageIcon("./Image/button_registration.png");
         Image scaled = iconRegis.getImage().getScaledInstance(150, 60, Image.SCALE_SMOOTH);
         add = new JButton(new ImageIcon(scaled));
         add.setBounds(70, 120, 130, 50);
         add.setFont(new Font("", Font.BOLD, 12));
-        
+
         ImageIcon iconRepeal = new ImageIcon("./Image/button_repeal.png");
         Image scaledRepeal = iconRepeal.getImage().getScaledInstance(140, 60, Image.SCALE_SMOOTH);
         drop = new JButton(new ImageIcon(scaledRepeal));
         drop.setBounds(230, 120, 130, 50);
         drop.setFont(new Font("", Font.BOLD, 12));
-        
+
         ImageIcon iconMylist = new ImageIcon("./Image/button_my-list.png");
         Image scaledMylist = iconMylist.getImage().getScaledInstance(140, 60, Image.SCALE_SMOOTH);
         mysubject = new JButton(new ImageIcon(scaledMylist));
         mysubject.setBounds(390, 120, 130, 50);
         mysubject.setFont(new Font("", Font.BOLD, 12));
-        
+
         ImageIcon iconLogout = new ImageIcon("./Image/LogoutIcon.png");
         Image scaledLogout = iconLogout.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         logout = new JButton(new ImageIcon(scaledLogout));
         logout.setBounds(540, 10, 30, 30);
         logout.setFont(new Font("", Font.BOLD, 7));
- 
+
         panel.setBounds(0, 0, 600, 300);
         panel.add(add);
         panel.add(drop);
         panel.add(mysubject);
         panel.add(logout);
-    
- 
+
         add.addActionListener(this);
         mysubject.addActionListener(this);
         drop.addActionListener(this);
         logout.addActionListener(this);
-         cp.add(panel);
- 
+        cp.add(panel);
+
     }
+
+    /** ตั้งขนาด ตำแหน่ง และแสดงหน้าต่าง */
     private void setupFrame() {
         this.setSize(600, 250);
         this.setLocationRelativeTo(null);
@@ -76,6 +95,13 @@ public class SelectionMenu extends JFrame implements ActionListener {
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
+    /**
+     * ตรวจว่านิสิตยังไม่มีวิชาใน Lib/sub_regis.csv หรือไม่
+     * 
+     * @param user รหัสนิสิต
+     * @return true ถ้ายังไม่มีวิชาที่ลงทะเบียน (จะถอนวิชาไม่ได้)
+     */
     private boolean checkrepeal(String user) {
         boolean nosubject = false;
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
@@ -92,9 +118,17 @@ public class SelectionMenu extends JFrame implements ActionListener {
         }
         return !nosubject;
     }
+
+ /**
+     * จัดการปุ่ม:
+     *  - logout: ยืนยันแล้ว dispose และเปิด Login
+     *  - add / mysubject: disable ปุ่มทั้งหมดแล้วเปิด Add / MyList
+     *  - drop: ถ้ายังไม่มีวิชาให้แจ้ง "Please Add Subject" ไม่เช่นนั้นเปิด Repeal
+     */    
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == logout) {
-            int confirm = JOptionPane.showConfirmDialog(this, "Do you want to logout?", "Confirm Logout",JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(this, "Do you want to logout?", "Confirm Logout",
+                    JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 this.dispose();
                 new Login();
@@ -124,10 +158,11 @@ public class SelectionMenu extends JFrame implements ActionListener {
                 logout.setEnabled(false);
                 new Repeal(this, currentuser);
             }
- 
+
         }
     }
- 
+
+/** เปิดปุ่มทุกปุ่มกลับ (ถูกเรียกเมื่อหน้าลูกปิด) */
     public void enableAddButton() {
         add.setEnabled(true);
         mysubject.setEnabled(true);
