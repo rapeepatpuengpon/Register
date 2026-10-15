@@ -1,28 +1,26 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+ 
 public class SelectionAdmin extends JFrame implements ActionListener{
-    Container cp;
-    JPanel panel,panel2;
-    JLabel selection;
-    JButton add,drop,logout;
-    String currentuser;
-    public SelectionAdmin(String user){
-        this.currentuser = user;
+    private Container cp;
+    private JPanel panel;
+    private JLabel selection;
+    private JButton add,drop,logout;
+    public SelectionAdmin(){
         Intitial();
         setComponent();
         setupFrame();
     }
-    public void Intitial(){
+    private void Intitial(){
         cp = this.getContentPane();
         
         panel = new BackgroundPanel("./Image/BackgroundSelection3.png");
         panel.setLayout(null);
-
+ 
         
     }
-    public void setComponent(){
+    private void setComponent(){
         selection = new JLabel("Select");
         selection.setBounds(250, 30, 300, 50);
         selection.setFont(new Font("",Font.BOLD,30));
@@ -37,13 +35,13 @@ public class SelectionAdmin extends JFrame implements ActionListener{
         drop = new JButton(new ImageIcon(scaledRepeal));
         drop.setBounds(320, 100, 130, 50);
         drop.setFont(new Font("",Font.BOLD,12));
-
+ 
         ImageIcon iconLogout = new ImageIcon("./Image/LogoutIcon.png");
         Image scaledLogout = iconLogout.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         logout = new JButton(new ImageIcon(scaledLogout));
         logout.setBounds(540, 10, 30, 30);
-
-
+ 
+ 
         panel.setBounds(0,0,600,300);
         panel.add(selection);
         panel.add(add);
@@ -53,9 +51,9 @@ public class SelectionAdmin extends JFrame implements ActionListener{
         drop.addActionListener(this);
         logout.addActionListener(this);
         cp.add(panel);
-
+ 
     }
-    public void setupFrame(){
+    private void setupFrame(){
         this.setSize(600, 250);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -72,12 +70,10 @@ public class SelectionAdmin extends JFrame implements ActionListener{
         }
         if (e.getSource()==add) {
             add.setEnabled(false);
-            drop.setEnabled(false);
             new AddAdmin(this);
         }
         if (e.getSource()==drop) {
             drop.setEnabled(false);
-            add.setEnabled(false);
             new RemoveSubjectAdmin(this);
         }
     }

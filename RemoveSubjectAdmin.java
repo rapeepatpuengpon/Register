@@ -2,34 +2,34 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
-
+ 
 import javax.swing.*;
-
+ 
 public class RemoveSubjectAdmin extends JFrame implements ActionListener{
-    Container cp;
-    JPanel headpanel,centerpanel,removepanel;
-    JLabel repeal,years;
-    JButton removebutton;
-    ButtonGroup group;
-    JScrollPane scrollpane;
-    JComboBox<String> comboBox;
-    SelectionAdmin menu;
-
+    private Container cp;
+    private JPanel headpanel,centerpanel,removepanel;
+    private JLabel repeal;
+    private JButton removebutton;
+    private ButtonGroup group;
+    private JScrollPane scrollpane;
+    private JComboBox<String> comboBox;
+    private SelectionAdmin menu;
+ 
     public RemoveSubjectAdmin(SelectionAdmin menu){
         this.menu = menu;
         Intitial();
         setComponent();
         setupFrame();
     }
-    public void Intitial(){
+    private void Intitial(){
        cp = this.getContentPane();
        cp.setBackground(Color.WHITE);
        cp.setLayout(new BorderLayout());
-
+ 
        headpanel = new BackgroundPanel("./Image/BlueIcon.png");
        headpanel.setLayout(new GridBagLayout());
        headpanel.setPreferredSize(new Dimension(100,150));
-
+ 
        centerpanel = new BackgroundPanel("./Image/Background.jpg");
        centerpanel.setLayout(new GridBagLayout());
        centerpanel.setPreferredSize(new Dimension(200,200));
@@ -40,7 +40,7 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
        removepanel.setBackground(Color.WHITE);
     }
                                                                                                                                                                                                                                                                                                              
-    public void setComponent(){
+    private void setComponent(){
     GridBagConstraints ghead = new GridBagConstraints();
     repeal = new JLabel("Repeal");
     repeal.setForeground(Color.white);
@@ -49,10 +49,10 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
     ghead.gridy = 0;
     headpanel.add(repeal,ghead);
     cp.add(headpanel,BorderLayout.NORTH);
-
+ 
     scrollpane = new JScrollPane(removepanel);
     scrollpane.setPreferredSize(new Dimension(700, 500));
-
+ 
     GridBagConstraints gremove = new GridBagConstraints();
     comboBox = new JComboBox<>(new String[]{"1","2","3","4"});
     comboBox.setPreferredSize(new Dimension(50,30));
@@ -61,7 +61,7 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
     gremove.gridy = 0;     
     gremove.anchor = GridBagConstraints.WEST;       
     centerpanel.add(comboBox,gremove);
-
+ 
     scrollpane = new JScrollPane(removepanel);
     scrollpane.setPreferredSize(new Dimension(700, 400));
     gremove.gridx = 0;
@@ -79,14 +79,14 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
     gremove.insets = new Insets(0, 0, 50, 0); 
     gremove.anchor = GridBagConstraints.EAST;
     centerpanel.add(removebutton,gremove);
-
+ 
     cp.add(centerpanel, BorderLayout.CENTER);
     comboBox.addActionListener(this);
     removebutton.addActionListener(this);
-
+ 
     loadSubjects((String)comboBox.getSelectedItem());
     }
-    public void setupFrame(){
+    private void setupFrame(){
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
@@ -98,7 +98,7 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
-    public void loadSubjects(String selectedYear){
+    private void loadSubjects(String selectedYear){
     removepanel.removeAll();
     group = new ButtonGroup();
     GridBagConstraints g = new GridBagConstraints();
@@ -107,7 +107,7 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
     g.weightx = 1;                             
     g.fill = GridBagConstraints.HORIZONTAL;
     int row = 0;
-
+ 
     try (BufferedReader br = new BufferedReader(new FileReader("./Lib/subject.csv"))) {
         String line;
         br.readLine();

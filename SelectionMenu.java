@@ -2,30 +2,30 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
-
+ 
 import javax.swing.*;
-
+ 
 public class SelectionMenu extends JFrame implements ActionListener {
-    Container cp;
-    JPanel panel,panel2;
-    JLabel selection;
-    JButton add, mysubject, drop, logout;
-    String currentuser;
-
+    private Container cp;
+    private JPanel panel;
+    private JLabel selection;
+    private JButton add, mysubject, drop, logout;
+    private String currentuser;
+ 
     public SelectionMenu(String user) {
         this.currentuser = user;
         Intitial();
         setComponent();
         setupFrame();
     }
-
-    public void Intitial() {
+ 
+    private void Intitial() {
         cp = this.getContentPane();
-
+ 
         panel = new BackgroundPanel("./Image/BackgroundSelection3.png");
         panel.setLayout(null);
     }
-    public void setComponent() {
+    private void setComponent() {
         selection = new JLabel("Select");
         selection.setBounds(250, 30, 300, 50);selection.setForeground(Color.BLACK);
         selection.setFont(new Font("", Font.BOLD, 30));
@@ -54,29 +54,29 @@ public class SelectionMenu extends JFrame implements ActionListener {
         logout = new JButton(new ImageIcon(scaledLogout));
         logout.setBounds(540, 10, 30, 30);
         logout.setFont(new Font("", Font.BOLD, 7));
-
+ 
         panel.setBounds(0, 0, 600, 300);
         panel.add(add);
         panel.add(drop);
         panel.add(mysubject);
         panel.add(logout);
     
-
+ 
         add.addActionListener(this);
         mysubject.addActionListener(this);
         drop.addActionListener(this);
         logout.addActionListener(this);
          cp.add(panel);
-
+ 
     }
-    public void setupFrame() {
+    private void setupFrame() {
         this.setSize(600, 250);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    public boolean checkrepeal(String user) {
+    private boolean checkrepeal(String user) {
         boolean nosubject = false;
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
             String s;
@@ -121,10 +121,10 @@ public class SelectionMenu extends JFrame implements ActionListener {
                 add.setEnabled(false);
                 new Repeal(this, currentuser);
             }
-
+ 
         }
     }
-
+ 
     public void enableAddButton() {
         add.setEnabled(true);
         mysubject.setEnabled(true);

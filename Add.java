@@ -2,22 +2,22 @@ import java.awt.event.*;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
-
+ 
 public class Add extends JFrame implements ActionListener {
-
-    Container cp;
-    JPanel headPanel, bodyPanel, listPanel;
-    JLabel regis, user, name , year, weight;
-    JLabel labelCode, labelSubject, currentweight;
-    JLabel head;
-    JRadioButton radio;
-    ButtonGroup group;
-    JScrollPane scrollPane;
-    JComboBox<String> comboBox;
-    JButton add;
-    SelectionMenu menu;
-    String currentuser;
-
+ 
+    private Container cp;
+    private JPanel headPanel, bodyPanel, listPanel;
+    private JLabel regis, user, name , year, weight;
+    private JLabel currentweight;
+    private JLabel head;
+    private JRadioButton radio;
+    private ButtonGroup group;
+    private JScrollPane scrollPane;
+    private JComboBox<String> comboBox;
+    private JButton add;
+    private SelectionMenu menu;
+    private String currentuser;
+ 
     public Add(SelectionMenu menu, String user) {
         this.menu = menu;
         this.currentuser = user;
@@ -25,16 +25,16 @@ public class Add extends JFrame implements ActionListener {
         setComponent();
         setupFrame();
     }
-
-    public void Intitial() {
+ 
+    private void Intitial() {
         cp = this.getContentPane();
         cp.setLayout(new BorderLayout());
         cp.setBackground(Color.WHITE);
-
+ 
         headPanel = new BackgroundPanel("./Image/BlueIcon.png");
         headPanel.setLayout(new GridBagLayout());
         headPanel.setPreferredSize(new Dimension(1000, 200));
-
+ 
         bodyPanel = new BackgroundPanel("./Image/Background.jpg");
         bodyPanel.setLayout(new GridBagLayout());
        
@@ -42,8 +42,8 @@ public class Add extends JFrame implements ActionListener {
         listPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
         listPanel.setBackground(Color.WHITE);
     }
-
-    public void setComponent() {
+ 
+    private void setComponent() {
         GridBagConstraints ghead = new GridBagConstraints();
         regis = new JLabel("Registration");
         regis.setFont(new Font("", Font.BOLD, 40));
@@ -53,7 +53,7 @@ public class Add extends JFrame implements ActionListener {
         ghead.weightx = 1;
         ghead.anchor = GridBagConstraints.CENTER;
         headPanel.add(regis, ghead);
-
+ 
         user = new JLabel(getusername());
         user.setForeground(Color.white);
         ghead.gridx = 0;
@@ -62,7 +62,7 @@ public class Add extends JFrame implements ActionListener {
         user.setFont(new Font("", Font.BOLD, 25));
         ghead.insets = new Insets(15, 100, 0, 0);
         headPanel.add(user, ghead);
-
+ 
         name = new JLabel(getname(getusername()));
         name.setForeground(Color.white);
         ghead.gridx = 0;
@@ -71,7 +71,7 @@ public class Add extends JFrame implements ActionListener {
         name.setFont(new Font("", Font.BOLD, 25));
         ghead.insets = new Insets(10, 100, 0, 0);
         headPanel.add(name, ghead);
-
+ 
         year = new JLabel("Year :" + getyear(currentuser));
         year.setForeground(Color.white);
         ghead.gridx = 0;
@@ -80,7 +80,7 @@ public class Add extends JFrame implements ActionListener {
         year.setFont(new Font("", Font.BOLD, 25));
         ghead.insets = new Insets(10, 100, 0, 0);
         headPanel.add(year, ghead);
-
+ 
         GridBagConstraints gbody = new GridBagConstraints();
         scrollPane = new JScrollPane(listPanel);
         scrollPane.setPreferredSize(new Dimension(800, 400));
@@ -98,18 +98,18 @@ public class Add extends JFrame implements ActionListener {
         gbody.anchor = GridBagConstraints.EAST;
         gbody.insets = new Insets(15, 0, 70, 0);
         bodyPanel.add(add, gbody);
-
-
-
+ 
+ 
+ 
         add.addActionListener(this);
-
+ 
         cp.add(bodyPanel, BorderLayout.CENTER);
         cp.add(headPanel, BorderLayout.NORTH);
-
+ 
         loadSubjects(getyear(currentuser));
     }
-
-    public void setupFrame() {
+ 
+    private void setupFrame() {
         this.setSize(1000, 800);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -121,47 +121,47 @@ public class Add extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
-
+ 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == comboBox) {
             loadSubjects((String) comboBox.getSelectedItem());
         }
-
+ 
         if (e.getSource() == add) {
-
+ 
             if (group.getSelection() != null) {
                 String selectedData = group.getSelection().getActionCommand();
                 String[] data = selectedData.split("\\|");
-
+ 
                 String code = data[0];
                 String subject = data[1];
                 int weight = Integer.parseInt(data[2]);
-
+ 
                 if (checkduplicatesubject(currentuser, getsubject())) {
                   JOptionPane.showMessageDialog(this,"Subject Duplicate");
                     return;
                 }
-
+ 
                 int currentweight = countweight(getusername());
                 if(currentweight + weight > 21) {
                   JOptionPane.showMessageDialog(this,"more than 21 credit");
                     return ;
                 }
-
+ 
                 savesubject(currentuser, code, subject, weight, getyear(currentuser));
-
+ 
                 loadSubjects(getyear(currentuser));
-
+ 
                 JOptionPane.showMessageDialog(this,"Add Complete");
             } else {
                 JOptionPane.showMessageDialog(this,"Please choose subject");
             }
-
+ 
         }
     }
-
-    public int countweight(String user) {
+ 
+    private int countweight(String user) {
         int total = 0;
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
             String s;
@@ -177,13 +177,13 @@ public class Add extends JFrame implements ActionListener {
         }
         return total;
     }
-
-    public boolean checkduplicatesubject(String user, String subject) {
+ 
+    private boolean checkduplicatesubject(String user, String subject) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
             String s;
             while ((s = br.readLine()) != null) {
                 String data[] = s.split(",");
-
+ 
                 if (data[0].equals(user) && data[2].equals(subject)) {
                     return true;
                 }
@@ -193,37 +193,37 @@ public class Add extends JFrame implements ActionListener {
         }
         return false;
     }
-
-    public void loadSubjects(String selectedYear) {
+ 
+    private void loadSubjects(String selectedYear) {
         listPanel.removeAll();
         group = new ButtonGroup();
-
+ 
         GridBagConstraints g = new GridBagConstraints();
         g.anchor = GridBagConstraints.WEST;
         int row = 0;
-
+ 
         head = new JLabel("Code | Subject | Weight");
         g.gridx = 0;
         g.gridy = 0;
         head.setFont(new Font("", Font.BOLD, 25));
         listPanel.add(head, g);
-
+ 
         weight = new JLabel("Weight");
         g.gridx = 1;
         g.gridy = 0;
         weight.setFont(new Font("", Font.BOLD, 20));
         g.insets = new Insets(0, 0, 0, 80);
         listPanel.add(weight, g);
-
+ 
         currentweight = new JLabel(countweight(getusername()) + "");
         g.gridx = 1;
         g.gridy = 1;
         currentweight.setFont(new Font("", Font.BOLD, 20));
         g.anchor = GridBagConstraints.CENTER;
         listPanel.add(currentweight, g);
-
+ 
         g.anchor = GridBagConstraints.WEST;
-
+ 
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/subject.csv"))) {
             br.readLine();
             String line;
@@ -233,9 +233,9 @@ public class Add extends JFrame implements ActionListener {
                     String code = d[0].trim();
                     String subject = d[1].trim();
                     String weight = d[2].trim();
-
+ 
                     g.gridy = row + 1;
-
+ 
                     g.gridx = 0;
                     g.weightx = 1;
                     radio = new JRadioButton(code + "|" + subject + "|" + weight);
@@ -244,9 +244,9 @@ public class Add extends JFrame implements ActionListener {
                     radio.setFont(new Font("", Font.PLAIN, 25));
                     group.add(radio);
                     listPanel.add(radio, g);
-
+ 
                     row++;
-
+ 
                 }
             }
             g.gridx = 0;
@@ -256,11 +256,11 @@ public class Add extends JFrame implements ActionListener {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+ 
         listPanel.revalidate();
         listPanel.repaint();
     }
-    public void savesubject(String user, String code, String subject, int weight, String year) {
+    private void savesubject(String user, String code, String subject, int weight, String year) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("Lib/sub_regis.csv", true))) {
             bw.write(user + "," + code + "," + subject + "," + weight + "," + year);
             bw.newLine();
@@ -268,28 +268,28 @@ public class Add extends JFrame implements ActionListener {
             e3.printStackTrace();
         }
     }
-    public String getusername() {
+    private String getusername() {
         return currentuser;
     }
-    public String getname(String user) {
+    private String getname(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();
             String s;
             while ((s = br.readLine()) != null) {
                 String data[] = s.split(",");
-
+ 
                 if (data[0].equals(user)) {
                     return data[1];
                 }
-
+ 
             }
         } catch (Exception e2) {
             e2.printStackTrace();
         }
         return "";
     }
-
-    public String getsubject() {
+ 
+    private String getsubject() {
         if (group.getSelection() != null) {
             String selectedData = group.getSelection().getActionCommand();
             String[] data = selectedData.split("\\|");
@@ -297,24 +297,24 @@ public class Add extends JFrame implements ActionListener {
         }
         return null;
     }
-
-    public String getyear(String user) {
+ 
+    private String getyear(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/Nisit.csv"))) {
             br.readLine();
             String s;
             while ((s = br.readLine()) != null) {
                 String data[] = s.split(",");
-
+ 
                 if (data[0].equals(user)) {
                     return data[3];
                 }
-
+ 
             }
         } catch (Exception e1) {
             e1.printStackTrace();
         }
         return "";
     }
-
+ 
     
 }
