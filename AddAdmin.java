@@ -15,9 +15,8 @@ public class AddAdmin extends JFrame implements ActionListener {
     SelectionAdmin menu;
     String currentuser;
 
-    public AddAdmin(SelectionAdmin menu,String user) {
+    public AddAdmin(SelectionAdmin menu) {
         this.menu = menu;
-        this.currentuser = user;
         Intitial();
         setComponent();
         setupFrame();
@@ -56,7 +55,6 @@ public class AddAdmin extends JFrame implements ActionListener {
         panelhead.add(add, ghead);
 
         GridBagConstraints gwrap = new GridBagConstraints();
-
         boxyear.addItem("1");
         boxyear.addItem("2");
         boxyear.addItem("3");

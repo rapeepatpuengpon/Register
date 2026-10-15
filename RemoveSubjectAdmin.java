@@ -14,11 +14,9 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
     JScrollPane scrollpane;
     JComboBox<String> comboBox;
     SelectionAdmin menu;
-    String currentuser;
 
-    public RemoveSubjectAdmin(SelectionAdmin menu,String user){
+    public RemoveSubjectAdmin(SelectionAdmin menu){
         this.menu = menu;
-        this.currentuser = user;
         Intitial();
         setComponent();
         setupFrame();
@@ -30,65 +28,59 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
 
        headpanel = new JPanel();
        headpanel.setLayout(new GridBagLayout());
-       headpanel.setPreferredSize(new Dimension(1500,200));
+       headpanel.setPreferredSize(new Dimension(100,150));
        headpanel.setBackground(Color.LIGHT_GRAY);
 
        centerpanel = new JPanel();
        centerpanel.setLayout(new GridBagLayout());
        centerpanel.setPreferredSize(new Dimension(200,200));
-       centerpanel.setBackground(Color.LIGHT_GRAY);
+       centerpanel.setBackground(Color.WHITE);
     
        removepanel = new JPanel();
        removepanel.setLayout(new GridBagLayout());   
-       removepanel.setBackground(Color.WHITE);
+       removepanel.setBackground(Color.LIGHT_GRAY);
     }
                                                                                                                                                                                                                                                                                                              
     public void setComponent(){
         
-        GridBagConstraints ghead = new GridBagConstraints();
-        repeal = new JLabel("Repeal");
-        repeal.setFont(new Font("",Font.BOLD,40));
-        ghead.gridx = 0;
-        ghead.gridy = 0;
-        headpanel.add(repeal,ghead);
-        cp.add(headpanel,BorderLayout.NORTH);
+    GridBagConstraints ghead = new GridBagConstraints();
+    repeal = new JLabel("Repeal");
+    repeal.setFont(new Font("",Font.BOLD,40));
+    ghead.gridx = 0;
+    ghead.gridy = 0;
+    headpanel.add(repeal,ghead);
+    cp.add(headpanel,BorderLayout.NORTH);
 
     scrollpane = new JScrollPane(removepanel);
     scrollpane.setPreferredSize(new Dimension(700, 500));
 
     GridBagConstraints gremove = new GridBagConstraints();
+    comboBox = new JComboBox<>(new String[]{"1","2","3","4"});
+    comboBox.setPreferredSize(new Dimension(70,50));
+    comboBox.setFont(new Font("",Font.BOLD,20));
     gremove.gridx = 0;
-    gremove.gridy = 0;
-    gremove.weightx = 1;
-    gremove.weighty = 1;
-    gremove.fill = GridBagConstraints.BOTH;
-    gremove.insets = new Insets(90, 100, 100, 100);
+    gremove.gridy = 0;      
+    gremove.anchor = GridBagConstraints.WEST;       
+    centerpanel.add(comboBox,gremove);
+
+    scrollpane = new JScrollPane(removepanel);
+    scrollpane.setPreferredSize(new Dimension(700, 400));
+    gremove.gridx = 0;
+    gremove.gridy = 1;
+    gremove.insets = new Insets(15, 0 , 0, 0);
     centerpanel.add(scrollpane, gremove);
 
-    GridBagConstraints gcenter = new GridBagConstraints();
     removebutton = new JButton("Remove");
-    removebutton.setFont(new Font("",Font.BOLD,20));
-    removebutton.setBackground(Color.WHITE);
-    gcenter.gridx = 0;
-    gcenter.gridy = 0;
-    gcenter.anchor = GridBagConstraints.SOUTH;
-    gcenter.insets = new Insets(100, 100, 30, 100);
-    centerpanel.add(removebutton,gcenter);
+    removebutton.setFont(new Font("",Font.BOLD,30));
+    gremove.gridx = 0;
+    gremove.gridy = 2;
+    gremove.anchor = GridBagConstraints.EAST;
+    centerpanel.add(removebutton,gremove);
 
-    GridBagConstraints gcombo = new GridBagConstraints();
-    comboBox = new JComboBox<>(new String[]{"1","2","3","4"});
-    comboBox.setFont(new Font("",Font.BOLD,20));
-    gcombo.gridx = 0;
-    gcombo.gridy = 0;
-    gcombo.insets = new Insets(30, 100, 0, 0);
-    gcombo.anchor = GridBagConstraints.NORTHWEST;
-    centerpanel.add(comboBox,gcombo);
-    
     cp.add(centerpanel, BorderLayout.CENTER);
     comboBox.addActionListener(this);
     removebutton.addActionListener(this);
-    
-    
+
     loadSubjects((String)comboBox.getSelectedItem());
     }
     public void setupFrame(){
@@ -122,8 +114,8 @@ public class RemoveSubjectAdmin extends JFrame implements ActionListener{
                     String code = data[0].trim();
                     String subject = data[1].trim();
                     String weight = data[2].trim();
-                    JRadioButton radio = new JRadioButton(code + " |  " + subject + "  " + weight + "  weight");
-                    radio.setBackground(Color.WHITE);
+                    JRadioButton radio = new JRadioButton(code + " |  " + subject + " - " + weight + "  weight");
+                    radio.setBackground(Color.LIGHT_GRAY);
                     radio.setFont(new Font("", Font.BOLD, 20));
                     radio.setActionCommand(code);
                     group.add(radio);

@@ -180,7 +180,6 @@ public class MyList extends JFrame {
                     JLabel labelweight = new JLabel(weight);
                     labelweight.setFont(new Font("", Font.PLAIN, 20));
                     panelbody.add(labelweight, glabel);
-
                     row++;
                 }
             }

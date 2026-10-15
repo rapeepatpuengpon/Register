@@ -10,8 +10,9 @@ public class Login extends JFrame implements ActionListener {
     JLabel regis;
     JLabel user;
     JTextField textuser;
-    JLabel pass;
+    JLabel pass,show;
     JPasswordField textpass;
+    JCheckBox showpass;
     JButton login;
     JLabel warningLabel;
 
@@ -26,12 +27,13 @@ public class Login extends JFrame implements ActionListener {
         cp.setBackground(Color.WHITE);
         cp.setLayout(null);
         p = new JPanel();
+        p.setBackground(Color.WHITE);
         p.setLayout(null);
     }
 
     public void setComponent(){
         regis = new JLabel("Registration");
-        regis.setBounds(0, 10, 300, 50);
+        regis.setBounds(0, 1, 300, 50);
         regis.setHorizontalAlignment(JLabel.CENTER);
         regis.setFont(new Font("", Font.BOLD, 25));
 
@@ -46,9 +48,18 @@ public class Login extends JFrame implements ActionListener {
         pass.setBounds(50, 120, 100, 50);
         textpass.setBounds(50,160, 200, 30);
         pass.setFont(new Font("", Font.BOLD, 16));
+        ImageIcon iconlogin = new ImageIcon("./Image/LoginIcon.png");
+        Image scaled = iconlogin.getImage()
+        .getScaledInstance(120, 60, Image.SCALE_SMOOTH);
+        login = new JButton(new ImageIcon(scaled));
+        login.setBounds(100, 240, 100, 40);
 
-        login = new JButton("Login");
-        login.setBounds(100, 220, 100, 40);
+        showpass = new JCheckBox();
+        showpass.setBounds(46, 190, 20, 20);
+        show = new JLabel("show password");
+        show.setBounds(70,190   , 100, 20);
+        show.setFont(new Font("", Font.BOLD, 9));
+
 
         warningLabel = new JLabel();
         warningLabel.setBounds(50,120,190,160);
@@ -61,8 +72,10 @@ public class Login extends JFrame implements ActionListener {
         p.add(textpass);
         p.add(login);
         p.add(warningLabel);
+        p.add(showpass);
+        p.add(show);
         login.addActionListener(this);
-
+        showpass.addActionListener(this);
         p.setBounds(95, 80, 300, 300);
         cp.add(p);
     }
@@ -75,36 +88,38 @@ public class Login extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-       login();
+        if (e.getSource()==showpass) {
+            if (showpass.isSelected()) {
+            textpass.setEchoChar((char)0);
+        }else textpass.setEchoChar('•');
+        }
+        if (e.getSource()==login) {
+            login();
+        }
     }
     public String getusername(){
         return textuser.getText();
     }
     public String getpassword(){
         return new String(textpass.getPassword());
-         
-    }
-    public void showWarning(String msg){
-        warningLabel.setText(msg);
     }
     public void login(){
         String user = getusername();
         String pass = getpassword();
     if (user.isEmpty() || pass.isEmpty()) {
-        showWarning("Username or Password isempty!!!");
+        JOptionPane.showMessageDialog(this,"Username or Password isempty!!!");
         return;
     }
-    if (checklogin(user,pass)) {;
+    if (checklogin(user,pass)) {
         this.dispose();
         new SelectionMenu(user);
     }
-    if (checkloginAdmin(user,pass)) {
+    else if (checkloginAdmin(user,pass)) {
         this.dispose();
         new SelectionAdmin(user);
     }
     else{
-        warningLabel.setForeground(Color.RED);
-        showWarning("invallid");
+        JOptionPane.showMessageDialog(this,"Invalid");
      }
     }
       public boolean checklogin(String user, String pass){
