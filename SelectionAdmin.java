@@ -70,15 +70,20 @@ public class SelectionAdmin extends JFrame implements ActionListener{
         }
         if (e.getSource()==add) {
             add.setEnabled(false);
+            drop.setEnabled(false);
+            logout.setEnabled(false);
             new AddAdmin(this);
         }
         if (e.getSource()==drop) {
             drop.setEnabled(false);
+            add.setEnabled(false);
+            logout.setEnabled(false);
             new RemoveSubjectAdmin(this);
         }
     }
     public void enableAddButton() {
         add.setEnabled(true);
         drop.setEnabled(true);
+        logout.setEnabled(true);
     }
 }

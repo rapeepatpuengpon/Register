@@ -104,12 +104,14 @@ public class SelectionMenu extends JFrame implements ActionListener {
             add.setEnabled(false);
             mysubject.setEnabled(false);
             drop.setEnabled(false);
+            logout.setEnabled(false);
             new Add(this, currentuser);
         }
         if (e.getSource() == mysubject) {
             mysubject.setEnabled(false);
             add.setEnabled(false);
             drop.setEnabled(false);
+            logout.setEnabled(false);
             new MyList(this, currentuser);
         }
         if (e.getSource() == drop) {
@@ -119,6 +121,7 @@ public class SelectionMenu extends JFrame implements ActionListener {
                 drop.setEnabled(false);
                 mysubject.setEnabled(false);
                 add.setEnabled(false);
+                logout.setEnabled(false);
                 new Repeal(this, currentuser);
             }
  
@@ -129,5 +132,6 @@ public class SelectionMenu extends JFrame implements ActionListener {
         add.setEnabled(true);
         mysubject.setEnabled(true);
         drop.setEnabled(true);
+        logout.setEnabled(true);
     }
 }
