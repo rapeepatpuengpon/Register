@@ -223,7 +223,6 @@ public class Repeal extends JFrame implements ActionListener {
  
     private String getyear(String user) {
         try (BufferedReader br = new BufferedReader(new FileReader("Lib/sub_regis.csv"))) {
-            br.readLine();
             String s;
             while ((s = br.readLine()) != null) {
                 String data[] = s.split(",");

@@ -115,9 +115,9 @@ public class Login extends JFrame implements ActionListener {
     }
  
     private void login() {
-        String user = getusername();
-        String pass = getpassword();
-        if (user.isEmpty() || pass.isEmpty()) {
+        String user = getusername().trim();
+        String pass = getpassword().trim();
+        if (user.isEmpty()|| pass.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Username or Password isempty!!!");
             return;
         }
